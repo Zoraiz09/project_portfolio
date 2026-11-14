@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Studio site
 
-## Getting Started
-
-First, run the development server:
+AI & software studio website — Next.js 15, TypeScript, Tailwind, Framer Motion, Lenis, React Three Fiber.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Editing content
+All copy lives in **`src/lib/content.ts`** — services, case studies, process, FAQ, stats, etc.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Still to fill in (search for `TODO`):
+- `site.name`, `site.email`, `site.calendly`, `site.socials` — studio name, domain email, booking link, profiles
+- `testimonials` — the section is hidden until real quotes are added
+- Contact form currently opens the visitor's email app; connect a backend (Resend / Formspree) in `Closing.tsx`
+- Logo: placeholder mark in `components/ui.tsx` (`Logo`) and `app/icon.svg`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Structure
+| File | Section |
+|---|---|
+| `components/Hero.tsx` + `Robot.tsx` | Hero with interactive 3D robot (original, built in code) |
+| `components/Services.tsx` | Bento grid with animated mini-visuals |
+| `components/Work.tsx` + `Mocks.tsx` | Stacked case studies, animated MCP editor & RAG chat mocks |
+| `components/Approach.tsx` | How we build AI (scroll pipeline) + Process timeline |
+| `components/Studio.tsx` + `Globe.tsx` | Studio, Stack, Global (canvas globe) |
+| `components/Closing.tsx` | Engagement, Testimonials, FAQ, Contact, Footer |
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Colours/fonts are tokens in `tailwind.config.ts` (Ivory & Ink palette, one blue accent).
+All motion respects `prefers-reduced-motion`; 3D and the globe pause when off-screen.

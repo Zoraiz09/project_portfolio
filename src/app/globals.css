@@ -2,20 +2,79 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    background: #fafaf7;
+    color: #16161a;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: #2f4bff;
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid #2f4bff;
+    outline-offset: 3px;
+    border-radius: 6px;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-site px-5 sm:px-8;
+  }
+  .label {
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-muted;
+  }
+  .h-section {
+    @apply font-display text-[2.4rem] font-semibold leading-[1.02] tracking-tightest text-ink sm:text-5xl lg:text-[3.6rem];
+  }
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-[15px] font-medium text-paper transition-colors duration-300 hover:bg-accent;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 rounded-full border border-line bg-surface/70 px-6 py-3.5 text-[15px] font-medium text-ink transition-colors duration-300 hover:border-ink;
+  }
+  .card {
+    @apply rounded-[22px] border border-line bg-surface shadow-card;
+  }
+}
+
+/* Faint dot grid used behind the hero and CTA */
+.dot-grid {
+  background-image: radial-gradient(rgba(22, 22, 26, 0.13) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.dot-grid-light {
+  background-image: radial-gradient(rgba(250, 250, 247, 0.12) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
