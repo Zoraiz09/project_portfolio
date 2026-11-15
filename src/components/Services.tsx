@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { AnimatePresence, motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { services, type Service } from "@/lib/content";
 import { Reveal, SectionHeading, SpotlightCard, ease } from "./ui";
@@ -94,7 +94,7 @@ function RagVisual() {
           ))}
         </div>
       ))}
-      <span className="absolute bottom-1 right-0 rounded-full bg-ink px-2.5 py-1 font-mono text-[10px] text-paper">
+      <span className="absolute bottom-1 right-0 z-10 rounded-full bg-ink px-2.5 py-1 font-mono text-[10px] text-paper">
         source [1] p.4
       </span>
     </div>
@@ -135,8 +135,8 @@ function BackendVisual() {
         [2, 3],
       ].map(([a, b], i) => (
         <g key={i}>
-          <line x1={nodes[a][0]} y1={nodes[a][1]} x2={nodes[b][0]} y2={nodes[b][1]} stroke="#E7E5E0" strokeWidth="0.8" />
-          <circle r="1.6" fill="#2F4BFF">
+          <line x1={nodes[a][0]} y1={nodes[a][1]} x2={nodes[b][0]} y2={nodes[b][1]} className="stroke-line" strokeWidth="0.8" />
+          <circle r="1.6" className="fill-accent">
             <animateMotion
               dur={`${2.2 + i * 0.3}s`}
               repeatCount="indefinite"
@@ -146,7 +146,7 @@ function BackendVisual() {
         </g>
       ))}
       {nodes.map(([x, y], i) => (
-        <rect key={i} x={x - 7} y={y - 7} width="14" height="14" rx="4" fill="#fff" stroke="#16161A" strokeWidth="0.8" />
+        <rect key={i} x={x - 7} y={y - 7} width="14" height="14" rx="4" className="fill-surface stroke-ink" strokeWidth="0.8" />
       ))}
     </svg>
   );
@@ -207,66 +207,166 @@ const spans: Record<Service["size"], string> = {
   sm: "md:col-span-2 lg:col-span-2",
 };
 
-/* ----------------------------- Section ----------------------------- */
+/* Small line icons used by the phone tiles */
+const icons: Record<Service["visual"], React.JSX.Element> = {
+  agent: <path d="M12 3v3M7 8h10a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-5a3 3 0 0 1 3-3ZM9.5 13v1M14.5 13v1" />,
+  rag: <path d="M6 4h9l3 3v13H6zM9 10h6M9 13h6M9 16h4" />,
+  saas: <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />,
+  backend: <path d="M5 4h14v6H5zM5 14h14v6H5zM8 7h.01M8 17h.01" />,
+  pipeline: <path d="M3 12h4l3-6 4 12 3-6h4" />,
+  ui: <path d="M4 5h16v14H4zM4 9h16M8 13h5M8 16h8" />,
+};
 
-export default function Services() {
+/** Phone: one compact, expandable list instead of big cards. */
+function ServiceList() {
+  const [open, setOpen] = useState<string | null>(services[0].id);
   return (
-    <section id="services" className="container-site py-20 sm:py-28">
-      <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-        <SectionHeading
-          index="01"
-          label="Services"
-          title="AI that does real work —"
-          italic="and the software"
-          after="around it."
-          intro="We specialise in production AI, backed by the full-stack engineering it takes to ship it."
-        />
-      </div>
-
-      <div className="mt-14 grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-6">
-        {services.map((s, i) => {
-          const V = visuals[s.visual];
-          return (
-            <Reveal key={s.id} delay={(i % 3) * 0.06} className={spans[s.size]}>
-              <SpotlightCard className="card flex h-full flex-col p-6 transition-shadow duration-500 hover:shadow-lift sm:p-7">
-                <div className="flex items-start justify-between">
-                  <span className="font-mono text-[11px] text-faint">0{i + 1}</span>
-                  {s.size === "lg" && (
-                    <span className="rounded-full bg-accent-soft px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-accent">
-                      Our specialty
-                    </span>
-                  )}
-                </div>
-                <div className={s.size === "lg" ? "mt-6 grid flex-1 grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[1fr_1.15fr] lg:items-center" : "mt-5"}>
-                  <div>
-                    <h3
-                      className={`font-display font-semibold tracking-tight ${
-                        s.size === "lg" ? "text-3xl leading-tight sm:text-[2.2rem]" : "text-xl"
-                      }`}
-                    >
-                      {s.title}
-                    </h3>
-                    <p className="mt-3 text-[15px] leading-relaxed text-muted">{s.body}</p>
-                    <ul className="mt-5 flex flex-wrap gap-1.5">
-                      {s.points.map((p) => (
-                        <li key={p} className="rounded-full border border-line px-2.5 py-1 text-[12px] text-muted">
-                          {p}
+    <div className="card mt-8 divide-y divide-line overflow-hidden p-0 md:hidden">
+      {services.map((s) => {
+        const isOpen = open === s.id;
+        const featured = s.size === "lg";
+        return (
+          <div key={s.id} className={featured ? "bg-accent-soft/40" : ""}>
+            <button
+              type="button"
+              onClick={() => setOpen(isOpen ? null : s.id)}
+              aria-expanded={isOpen}
+              className="flex w-full items-center gap-3.5 px-4 py-3.5 text-left"
+            >
+              <span
+                className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl transition-colors duration-300 ${
+                  isOpen ? "bg-accent text-white" : "bg-accent-soft text-accent"
+                }`}
+              >
+                <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  {icons[s.visual]}
+                </svg>
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="flex items-center gap-2">
+                  <span className="truncate font-display text-[15.5px] font-semibold tracking-tight">{s.title}</span>
+                </span>
+                <span className="mt-0.5 block truncate text-[12.5px] text-muted">
+                  {featured ? "Our specialty · " : ""}
+                  {s.points.slice(0, 3).join(" · ")}
+                </span>
+              </span>
+              <span
+                className={`grid h-7 w-7 shrink-0 place-items-center rounded-full border transition-all duration-300 ${
+                  isOpen ? "rotate-45 border-ink bg-ink text-paper" : "border-line text-muted"
+                }`}
+                aria-hidden
+              >
+                <svg viewBox="0 0 12 12" className="h-2.5 w-2.5">
+                  <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </span>
+            </button>
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.35, ease }}
+                  className="overflow-hidden"
+                >
+                  <div className="pb-4 pl-[4.25rem] pr-4">
+                    <p className="text-[13.5px] leading-relaxed text-muted">{s.body}</p>
+                    <ul className="mt-3 flex flex-wrap gap-1.5">
+                      {s.points.map((pt) => (
+                        <li key={pt} className="rounded-full border border-line bg-surface px-2.5 py-1 text-[11.5px] text-muted">
+                          {pt}
                         </li>
                       ))}
                     </ul>
                   </div>
-                  {s.size === "lg" && <V />}
-                </div>
-                {s.size !== "lg" && (
-                  <div className="mt-auto pt-6">
-                    <V />
-                  </div>
-                )}
-              </SpotlightCard>
-            </Reveal>
-          );
-        })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ----------------------------- Section ----------------------------- */
+
+function ServiceCard({ s }: { s: Service; i?: number }) {
+  const V = visuals[s.visual];
+  const lg = s.size === "lg";
+  return (
+    <SpotlightCard className="card flex h-full flex-col p-5 sm:p-7">
+      <div className={lg ? "flex items-start justify-between" : "hidden"}>
+        {lg && <span className="rounded-full bg-accent-soft px-3 py-1 text-[12px] font-medium text-accent">Our specialty</span>}
       </div>
+      <div className={lg ? "mt-4 grid flex-1 grid-cols-[minmax(0,1fr)] gap-6 sm:mt-6 sm:gap-8 lg:grid-cols-[1fr_1.15fr] lg:items-stretch" : "mt-4 sm:mt-5"}>
+        <div className={lg ? "flex flex-col lg:justify-between lg:py-2" : ""}>
+          <div>
+            <h3 className={`font-display font-semibold tracking-tight ${lg ? "text-[1.6rem] leading-tight sm:text-[2.2rem]" : "text-lg sm:text-xl"}`}>
+              {s.title}
+            </h3>
+            <p className="mt-2.5 text-[14.5px] leading-relaxed text-muted sm:mt-3 sm:text-[15px]">{s.body}</p>
+          </div>
+          <ul className="mt-4 flex flex-wrap gap-1.5 sm:mt-5">
+            {s.points.map((p) => (
+              <li key={p} className="rounded-full border border-line px-2.5 py-1 text-[12px] text-muted">
+                {p}
+              </li>
+            ))}
+          </ul>
+        </div>
+        {lg && (
+          <div className="flex flex-col justify-center">
+            <V />
+          </div>
+        )}
+      </div>
+      {!lg && (
+        <div className="mt-auto pt-5 sm:pt-6">
+          <V />
+        </div>
+      )}
+    </SpotlightCard>
+  );
+}
+
+export default function Services() {
+  const featured = services.filter((s) => s.size === "lg");
+  const rest = services.filter((s) => s.size !== "lg");
+  return (
+    <section id="services" className="container-site py-14 sm:py-28">
+      <SectionHeading
+        split
+        index="01"
+        label="Services"
+        title="AI that does real work,"
+        italic="and the software"
+        after="around it."
+        intro="We specialise in production AI, backed by the full-stack engineering it takes to ship it."
+      />
+
+      <Reveal>
+        <ServiceList />
+      </Reveal>
+
+      <div className="mt-14 hidden md:grid md:grid-cols-6 md:gap-4">
+        {featured.map((s) => (
+          <Reveal key={s.id} className={spans[s.size]}>
+            <ServiceCard s={s} i={services.indexOf(s)} />
+          </Reveal>
+        ))}
+        {/* md+: these cards join the bento grid */}
+        <div className="hidden md:contents">
+          {rest.map((s, i) => (
+            <Reveal key={s.id} delay={(i % 3) * 0.06} className={spans[s.size]}>
+              <ServiceCard s={s} i={services.indexOf(s)} />
+            </Reveal>
+          ))}
+        </div>
+      </div>
+
     </section>
   );
 }

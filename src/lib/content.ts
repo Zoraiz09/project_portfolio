@@ -10,7 +10,7 @@ export const site = {
   location: "Pakistan · Working worldwide",
   timezone: "GMT+5",
   description:
-    "An AI-first software studio. We build AI agents, RAG assistants, MCP integrations and full-stack products — from idea to production.",
+    "An AI-first software studio. We build AI agents, RAG assistants, MCP integrations and full-stack products, from idea to production.",
   socials: [
     { label: "LinkedIn", href: "#" },
     { label: "GitHub", href: "#" },
@@ -31,7 +31,7 @@ export const hero = {
   titleItalic: "intelligent",
   titleAfter: "software that ships.",
   rotating: ["AI agents", "RAG assistants", "MCP integrations", "SaaS products", "scalable backends"],
-  sub: "An AI-first development studio helping companies turn AI from a demo into a product — designed, engineered and deployed end to end.",
+  sub: "An AI-first development studio helping companies turn AI from a demo into a product. We design, engineer and deploy it end to end.",
 };
 
 export const experience = ["Kinolane", "Attock Refinery Limited", "AIGenMat", "Project IRIS"];
@@ -49,7 +49,7 @@ export const services: Service[] = [
   {
     id: "agents",
     title: "AI Agents & MCP Integrations",
-    body: "We connect AI to your software. Using the Model Context Protocol, we expose your product's features as tools an AI can use — so users get complex work done with a single prompt.",
+    body: "We connect AI to your software. Using the Model Context Protocol, we expose your product's features as tools an AI can use, so users get complex work done with a single prompt.",
     points: ["MCP servers", "Tool calling", "Multi-agent workflows", "Prompt-to-action UX"],
     size: "lg",
     visual: "agent",
@@ -57,7 +57,7 @@ export const services: Service[] = [
   {
     id: "rag",
     title: "RAG Assistants",
-    body: "Chat with your documents, codebase or knowledge base — with cited answers your team can trust.",
+    body: "Chat with your documents, codebase or knowledge base and get cited answers your team can trust.",
     points: ["Hybrid search", "Reranking", "Citations"],
     size: "md",
     visual: "rag",
@@ -89,7 +89,7 @@ export const services: Service[] = [
   {
     id: "ui",
     title: "Product Design & Frontend",
-    body: "Interfaces people enjoy using — fast, accessible, pixel-faithful.",
+    body: "Fast, accessible interfaces built pixel-faithfully from design.",
     points: ["React", "Design systems", "Motion"],
     size: "sm",
     visual: "ui",
@@ -113,7 +113,7 @@ export const work: CaseStudy[] = [
     id: "mcp-editor",
     tag: "AI Agents · MCP",
     title: "Prompt-to-edit AI for a video editor",
-    client: "Kinolane — media platform",
+    client: "Kinolane, media platform",
     problem: "Editing meant learning every tool in the editor and doing each step by hand.",
     solution:
       "We built an MCP server that exposes the editor's capabilities as AI tools. Users describe the edit in plain language; the model plans the steps and executes them through MCP.",
@@ -128,13 +128,13 @@ export const work: CaseStudy[] = [
   {
     id: "codesage",
     tag: "AI · RAG · Dev tools",
-    title: "CodeSage AI — code review that runs on your machine",
+    title: "CodeSage AI: code review that runs on your machine",
     client: "Product build",
     problem: "Teams want AI code review without sending proprietary source code to a third party.",
     solution:
       "A private review platform combining static analysis, AI reviews, generated docs and a RAG chat over the repository with file-and-line citations.",
     highlights: [
-      "RAG chat with file/line citations — 487-chunk repo indexed in ~2 min on CPU",
+      "RAG chat with file/line citations; a 487-chunk repo indexes in about 2 minutes on CPU",
       "Security scans for secrets, SQL injection and exposed keys",
       "AI reviews built from stats, never raw source; 38 passing tests",
     ],
@@ -160,11 +160,11 @@ export const work: CaseStudy[] = [
   {
     id: "systemforge",
     tag: "Multi-agent AI",
-    title: "SystemForge — an AI software architect",
+    title: "SystemForge: an AI software architect",
     client: "Product build",
     problem: "Planning a system's architecture takes senior time most early teams don't have.",
     solution:
-      "Turns a one-line idea into an explorable architecture map, then calls specialist agents — cost, risk, scaling, API, database — and an architecture council that debates to a verdict.",
+      "Turns a one-line idea into an explorable architecture map, then calls specialist agents (cost, risk, scaling, API, database) and an architecture council that debates to a verdict.",
     highlights: [
       "Interactive canvas: click any node for stack and dependencies",
       "7 specialist agents plus a debating council",
@@ -193,16 +193,10 @@ export const work: CaseStudy[] = [
 
 export const moreWork = [
   {
-    title: "Distributed file storage",
-    body: "Chunked, replicated, self-healing storage with Reed-Solomon erasure coding and AES-256 encryption.",
-    tag: "Backend · Infra",
-    img: "/work/dfss.webp",
-  },
-  {
     title: "Project IRIS",
     body: "Multi-tenant AgriTech SaaS: live field telemetry, row-level security and AI irrigation recommendations.",
     tag: "SaaS · AI",
-    img: "",
+    img: "/work/iris.webp",
   },
   {
     title: "Dewy",
@@ -222,18 +216,18 @@ export const aiPipeline = {
   ],
   principles: [
     { t: "Your data stays yours", d: "Private deployments, scoped access, and no raw data sent where it doesn't need to go." },
-    { t: "Answers with sources", d: "Retrieval with citations so every answer can be checked — not guessed." },
+    { t: "Answers with sources", d: "Retrieval with citations so every answer can be checked, not guessed." },
     { t: "Predictable costs", d: "Model routing, caching and token budgets designed in from the start." },
     { t: "Tested, not hoped", d: "Evaluation sets and automated tests before anything reaches your users." },
   ],
 };
 
 export const process = [
-  { t: "Discovery call", d: "We learn your goals, users and constraints. You get honest advice — even if it's not to build.", time: "Day 1" },
+  { t: "Discovery call", d: "We learn your goals, users and constraints. You get honest advice, even if that advice is not to build.", time: "Day 1" },
   { t: "Scope & proposal", d: "A clear plan, fixed milestones and a price you can approve.", time: "Week 1" },
-  { t: "Proof of concept", d: "For AI work, a working prototype on your real data — so you see it before you commit.", time: "Weeks 1–2" },
+  { t: "Proof of concept", d: "For AI work, a working prototype on your real data, so you see it before you commit.", time: "Weeks 1–2" },
   { t: "Build in sprints", d: "Weekly demos and a live staging link. No black boxes.", time: "Ongoing" },
-  { t: "Launch & support", d: "Deployment, monitoring, handover docs — and we stay on to improve it.", time: "Launch +" },
+  { t: "Launch & support", d: "Deployment, monitoring and handover docs. We stay on to keep improving it.", time: "Launch +" },
 ];
 
 export const studio = {
@@ -241,7 +235,7 @@ export const studio = {
   values: [
     { t: "Senior engineering on every project", d: "The people on your discovery call are the people writing your code." },
     { t: "Weekly demos, no black boxes", d: "You see real progress every week, on a link you can click." },
-    { t: "Built to scale", d: "Architecture that survives your first ten thousand users — and the next hundred thousand." },
+    { t: "Built to scale", d: "Architecture that survives your first ten thousand users and the next hundred thousand." },
   ],
   stats: [
     { n: 8, suffix: "+", l: "Products & systems shipped" },
@@ -287,10 +281,10 @@ export const engagement = [
 export const testimonials: { quote: string; name: string; role: string }[] = [];
 
 export const faq = [
-  { q: "Can you add AI to our existing product?", a: "Yes — that's most of what we do. Using MCP and tool calling we expose your product's features to an AI model, so users can work through natural language without you rebuilding anything." },
+  { q: "Can you add AI to our existing product?", a: "Yes, that's most of what we do. Using MCP and tool calling we expose your product's features to an AI model, so users can work through natural language without you rebuilding anything." },
   { q: "Is our data safe?", a: "We design for privacy first: scoped access, private or self-hosted models where needed, and nothing sent to a model that doesn't need to be. We're happy to sign an NDA before any discussion." },
   { q: "Which AI models do you use?", a: "Whichever fits the job. We work with the major commercial LLMs and open-source models, and choose based on quality, latency, cost and where your data is allowed to go." },
-  { q: "What will AI cost us to run each month?", a: "We estimate it during the proof of concept and design for it — caching, model routing and token budgets keep running costs predictable." },
+  { q: "What will AI cost us to run each month?", a: "We estimate it during the proof of concept and design for it. Caching, model routing and token budgets keep running costs predictable." },
   { q: "How do we work across time zones?", a: `We're based in ${"GMT+5"} and keep regular overlap hours with Europe, the Middle East and the US East Coast, plus async updates and weekly demo calls.` },
   { q: "Who owns the code?", a: "You do. All code, designs and IP are transferred to you on payment, and you get full repository access from day one." },
 ];

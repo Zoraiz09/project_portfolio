@@ -80,6 +80,17 @@ export default function Globe() {
     let raf = 0;
     let t0 = performance.now();
 
+    // Theme colours, re-read only when the theme class changes (not every frame).
+    const colors = { ink: "22,22,26", acc: "47,75,255" };
+    const readColors = () => {
+      const css = getComputedStyle(document.documentElement);
+      colors.ink = css.getPropertyValue("--ink").trim().replace(/ /g, ",") || colors.ink;
+      colors.acc = css.getPropertyValue("--accent").trim().replace(/ /g, ",") || colors.acc;
+    };
+    readColors();
+    const themeObserver = new MutationObserver(readColors);
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
     const project = (v: number[]) => {
       // rotate Y
       const x1 = v[0] * Math.cos(rotY) + v[2] * Math.sin(rotY);
@@ -101,13 +112,14 @@ export default function Globe() {
       const R = Math.min(w, h) * 0.42;
       const cx = w / 2;
       const cy = h / 2;
+      const { ink, acc } = colors;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
 
       // outline
       ctx.beginPath();
       ctx.arc(cx, cy, R, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(22,22,26,0.08)";
+      ctx.strokeStyle = `rgba(${ink},0.1)`;
       ctx.lineWidth = 1;
       ctx.stroke();
 
@@ -116,7 +128,7 @@ export default function Globe() {
         const [x, y, z] = project(p);
         if (z < -0.1) continue;
         const a = 0.08 + Math.max(0, z) * 0.32;
-        ctx.fillStyle = `rgba(22,22,26,${a})`;
+        ctx.fillStyle = `rgba(${ink},${a})`;
         ctx.fillRect(cx + x * R - 0.8, cy - y * R - 0.8, 1.6, 1.6);
       }
 
@@ -140,7 +152,7 @@ export default function Globe() {
             started = true;
           } else ctx.lineTo(sx, sy);
         }
-        ctx.strokeStyle = "rgba(47,75,255,0.75)";
+        ctx.strokeStyle = `rgba(${acc},0.8)`;
         ctx.lineWidth = 1.4;
         ctx.stroke();
 
@@ -148,7 +160,7 @@ export default function Globe() {
         if (end[2] > 0 && local >= 1) {
           ctx.beginPath();
           ctx.arc(cx + end[0] * R, cy - end[1] * R, 3, 0, Math.PI * 2);
-          ctx.fillStyle = "#2F4BFF";
+          ctx.fillStyle = `rgb(${acc})`;
           ctx.fill();
         }
       });
@@ -159,11 +171,11 @@ export default function Globe() {
         const pulse = reduced ? 0 : (now / 1400) % 1;
         ctx.beginPath();
         ctx.arc(cx + hp[0] * R, cy - hp[1] * R, 4 + pulse * 12, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(22,22,26,${0.18 * (1 - pulse)})`;
+        ctx.fillStyle = `rgba(${ink},${0.18 * (1 - pulse)})`;
         ctx.fill();
         ctx.beginPath();
         ctx.arc(cx + hp[0] * R, cy - hp[1] * R, 4.5, 0, Math.PI * 2);
-        ctx.fillStyle = "#16161A";
+        ctx.fillStyle = `rgb(${ink})`;
         ctx.fill();
       }
 
@@ -183,6 +195,7 @@ export default function Globe() {
     return () => {
       cancelAnimationFrame(raf);
       io.disconnect();
+      themeObserver.disconnect();
     };
   }, []);
 

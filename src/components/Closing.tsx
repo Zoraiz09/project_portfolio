@@ -1,64 +1,117 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { engagement, faq, nav, site, testimonials } from "@/lib/content";
-import { Arrow, Logo, Magnetic, Reveal, SectionHeading, ease } from "./ui";
+import { Arrow, CarouselDots, Logo, Magnetic, Reveal, SectionHeading, SwipeHint, ease } from "./ui";
 
 /* ---------------------------- Engagement ---------------------------- */
 
-export function Engagement() {
+type Plan = (typeof engagement)[number];
+
+function PlanCard({ e, phone }: { e: Plan; phone?: boolean }) {
   return (
-    <section id="engage" className="container-site py-20 sm:py-28">
+    <div
+      className={`relative flex h-full flex-col rounded-[22px] border p-6 transition-all duration-500 sm:p-8 ${phone ? "" : "hover:-translate-y-1"} ${
+        e.featured
+          ? "border-night bg-night text-snow shadow-lift dark:border-accent/40 dark:bg-accent-soft"
+          : "border-line bg-surface shadow-card hover:shadow-lift"
+      }`}
+    >
+      {e.featured && (
+        <span className="absolute right-6 top-6 rounded-full bg-accent px-3 py-1 text-[12px] font-medium text-white">
+          Most popular
+        </span>
+      )}
+      <p className={`text-[14px] ${e.featured ? "pr-28 text-snow/60" : "text-muted"}`}>{e.for}</p>
+      <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight">{e.name}</h3>
+      <ul className="mb-8 mt-6 space-y-3 text-[14.5px] sm:mb-10 sm:mt-7 sm:text-[15px]">
+        {e.points.map((p) => (
+          <li key={p} className="flex gap-3">
+            <svg viewBox="0 0 16 16" className={`mt-1 h-4 w-4 shrink-0 ${e.featured ? "text-[#8FA0FF]" : "text-accent"}`} aria-hidden>
+              <path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span className={e.featured ? "text-snow/85" : "text-ink/80"}>{p}</span>
+          </li>
+        ))}
+      </ul>
+      <a
+        href={site.calendly || "#contact"}
+        className={`group mt-auto inline-flex items-center justify-between rounded-full border px-5 py-3 text-[14px] font-medium transition-colors duration-300 ${
+          e.featured
+            ? "border-snow/20 bg-snow text-night hover:bg-accent hover:text-white sm:bg-transparent sm:text-snow sm:hover:bg-snow sm:hover:text-night"
+            : "border-line hover:border-ink hover:bg-ink hover:text-paper"
+        }`}
+      >
+        {e.cta}
+        <Arrow className="transition-transform duration-300 group-hover:translate-x-1" />
+      </a>
+    </div>
+  );
+}
+
+const planTabs = ["PoC", "Project", "Retainer"];
+
+export function Engagement() {
+  const listRef = useRef<HTMLDivElement>(null);
+  const [tab, setTab] = useState(Math.max(0, engagement.findIndex((e) => e.featured)));
+  return (
+    <section id="engage" className="container-site py-14 sm:py-28">
       <SectionHeading
+        split
         index="08"
         label="Ways to work together"
         title="Start small,"
         italic="or go all in."
         intro="Every engagement starts with a free discovery call and a written proposal. No lock-in."
       />
-      <div className="mt-14 grid gap-4 lg:grid-cols-3">
-        {engagement.map((e, i) => (
-          <Reveal key={e.name} delay={i * 0.08}>
-            <div
-              className={`relative flex h-full flex-col rounded-[22px] border p-7 transition-all duration-500 hover:-translate-y-1 sm:p-8 ${
-                e.featured ? "border-ink bg-ink text-paper shadow-lift" : "border-line bg-surface shadow-card hover:shadow-lift"
-              }`}
+
+      {/* Phone: segmented control, one plan at a time */}
+      <div className="mt-8 md:hidden">
+        <div role="tablist" aria-label="Engagement type" className="relative grid grid-cols-3 rounded-full border border-line bg-surface p-1">
+          {engagement.map((e, i) => (
+            <button
+              key={e.name}
+              role="tab"
+              aria-selected={tab === i}
+              onClick={() => setTab(i)}
+              className={`relative z-10 rounded-full py-2.5 text-[13.5px] font-medium transition-colors duration-300 ${tab === i ? "text-paper" : "text-muted"}`}
             >
-              {e.featured && (
-                <span className="absolute right-6 top-6 rounded-full bg-accent px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white">
-                  Most popular
-                </span>
+              {tab === i && (
+                <motion.span layoutId="plan-pill" transition={{ type: "spring", stiffness: 420, damping: 36 }} className="absolute inset-0 -z-10 rounded-full bg-ink" />
               )}
-              <p className={`font-mono text-[11px] uppercase tracking-[0.18em] ${e.featured ? "pr-28 text-paper/50" : "text-muted"}`}>
-                {e.for}
-              </p>
-              <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight">{e.name}</h3>
-              <ul className="mb-10 mt-7 space-y-3 text-[15px]">
-                {e.points.map((p) => (
-                  <li key={p} className="flex gap-3">
-                    <svg viewBox="0 0 16 16" className={`mt-1 h-4 w-4 shrink-0 ${e.featured ? "text-[#8FA0FF]" : "text-accent"}`} aria-hidden>
-                      <path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <span className={e.featured ? "text-paper/85" : "text-ink/80"}>{p}</span>
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={site.calendly || "#contact"}
-                className={`group mt-auto inline-flex items-center justify-between rounded-full border px-5 py-3 text-[14px] font-medium transition-colors duration-300 ${
-                  e.featured
-                    ? "border-paper/20 hover:bg-paper hover:text-ink"
-                    : "border-line hover:border-ink hover:bg-ink hover:text-paper"
-                }`}
-              >
-                {e.cta}
-                <Arrow className="transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
-            </div>
+              {planTabs[i] ?? e.name}
+            </button>
+          ))}
+        </div>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={tab}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.3, ease }}
+            className="mt-4"
+            role="tabpanel"
+          >
+            <PlanCard e={engagement[tab]} phone />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Tablet: swipe row · Desktop: 3-column grid */}
+      <SwipeHint className="hidden md:flex lg:hidden" />
+      <div
+        ref={listRef}
+        className="mt-3 hidden snap-x snap-mandatory gap-3 overflow-x-auto pb-3 no-scrollbar md:-mx-8 md:flex md:scroll-pl-8 md:px-8 lg:mx-0 lg:mt-14 lg:grid lg:grid-cols-3 lg:gap-4 lg:overflow-visible lg:px-0 lg:pb-0"
+      >
+        {engagement.map((e, i) => (
+          <Reveal key={e.name} delay={i * 0.08} className="w-[340px] shrink-0 snap-start lg:w-auto">
+            <PlanCard e={e} />
           </Reveal>
         ))}
       </div>
+      <CarouselDots target={listRef} count={engagement.length} className="hidden md:flex lg:hidden" />
     </section>
   );
 }
@@ -76,7 +129,7 @@ export function Testimonials() {
 
   const t = testimonials[i];
   return (
-    <section className="border-y border-line bg-surface py-20 sm:py-28">
+    <section className="border-y border-line bg-surface py-16 sm:py-28">
       <div className="container-site max-w-4xl text-center">
         <p className="label">What clients say</p>
         <AnimatePresence mode="wait">
@@ -87,9 +140,9 @@ export function Testimonials() {
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.6, ease }}
           >
-            <blockquote className="mt-8 font-serif text-3xl leading-snug sm:text-[2.6rem]">“{t.quote}”</blockquote>
+            <blockquote className="mt-8 font-display text-3xl font-medium leading-snug tracking-tight sm:text-[2.4rem]">“{t.quote}”</blockquote>
             <figcaption className="mt-8 text-[15px]">
-              <span className="font-medium">{t.name}</span> <span className="text-muted">— {t.role}</span>
+              <span className="font-medium">{t.name}</span> <span className="text-muted">· {t.role}</span>
             </figcaption>
           </motion.figure>
         </AnimatePresence>
@@ -103,8 +156,8 @@ export function Testimonials() {
 export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section id="faq" className="container-site py-20 sm:py-28">
-      <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+    <section id="faq" className="container-site py-14 sm:py-28">
+      <div className="grid gap-8 sm:gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
         <div className="lg:sticky lg:top-28 lg:self-start">
           <SectionHeading index="09" label="FAQ" title="Questions," italic="answered." />
           <Reveal delay={0.1}>
@@ -125,9 +178,9 @@ export function FAQ() {
                 <button
                   onClick={() => setOpen(isOpen ? null : i)}
                   aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-6 py-6 text-left"
+                  className="flex w-full items-center justify-between gap-5 py-5 text-left sm:gap-6 sm:py-6"
                 >
-                  <span className="font-display text-lg font-medium tracking-tight sm:text-xl">{f.q}</span>
+                  <span className="font-display text-[17px] font-medium tracking-tight sm:text-xl">{f.q}</span>
                   <span
                     className={`relative grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-colors duration-300 ${
                       isOpen ? "border-ink bg-ink text-paper" : "border-line"
@@ -148,7 +201,7 @@ export function FAQ() {
                       transition={{ duration: 0.45, ease }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-2xl pb-6 text-[15px] leading-relaxed text-muted">{f.a}</p>
+                      <p className="max-w-2xl pb-5 text-[14.5px] leading-relaxed text-muted sm:pb-6 sm:text-[15px]">{f.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -176,44 +229,43 @@ export function Contact() {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const body = `Name: ${f.get("name")}\nCompany: ${f.get("company") || "-"}\nProject: ${type}\nBudget: ${budget}\n\n${f.get("message")}`;
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(`New project — ${type}`)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(`New project: ${type}`)}&body=${encodeURIComponent(body)}`;
     setSent(true);
   };
 
   const field =
-    "w-full rounded-xl border border-paper/15 bg-paper/[0.04] px-4 py-3.5 text-[15px] text-paper placeholder:text-paper/35 outline-none transition-colors duration-300 focus:border-paper/50 focus:bg-paper/[0.07]";
+    "w-full rounded-xl border border-snow/15 bg-snow/[0.04] px-4 py-3.5 text-[15px] text-snow placeholder:text-snow/35 outline-none transition-colors duration-300 focus:border-snow/50 focus:bg-snow/[0.07]";
 
   return (
-    <section id="contact" className="relative overflow-hidden bg-ink py-24 text-paper sm:py-32">
-      <div
-        aria-hidden
-        className="dot-grid-light pointer-events-none absolute inset-0"
-        style={{ maskImage: "radial-gradient(ellipse 60% 70% at 20% 30%, black, transparent 70%)", WebkitMaskImage: "radial-gradient(ellipse 60% 70% at 20% 30%, black, transparent 70%)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-40 top-0 h-[480px] w-[480px] rounded-full opacity-50 blur-[120px]"
-        style={{ background: "radial-gradient(circle, rgba(47,75,255,0.45), transparent 70%)" }}
-      />
-
-      <div className="container-site relative grid gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
+    <section id="contact" className="relative overflow-hidden bg-night py-16 text-snow sm:py-32">
+      <div className="container-site relative grid gap-10 sm:gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
         <div>
           <SectionHeading
             index="10"
             label="Contact"
             title="Have an idea?"
             italic="Let's build it."
-            intro="Tell us what you're working on. You'll hear back within 24 hours — from a senior engineer, not an account manager."
+            intro="Tell us what you're working on. You'll hear back within 24 hours from a senior engineer, not an account manager."
             light
           />
           <Reveal delay={0.15}>
-            <div className="mt-10 space-y-4 text-[15px]">
-              <a href={`mailto:${site.email}`} className="group flex items-center gap-3 text-paper/80 transition-colors hover:text-paper">
-                <span className="grid h-10 w-10 place-items-center rounded-full border border-paper/15">@</span>
+            <div className="mt-8 space-y-3 text-[14px] sm:mt-10 sm:space-y-4 sm:text-[15px]">
+              <a href={`mailto:${site.email}`} className="group flex items-center gap-3 text-snow/80 transition-colors hover:text-snow">
+                <span className="grid h-10 w-10 place-items-center rounded-full border border-snow/15">
+                  <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden>
+                    <rect x="2" y="3.5" width="12" height="9" rx="1.5" />
+                    <path d="M2.5 4.5 8 9l5.5-4.5" strokeLinejoin="round" />
+                  </svg>
+                </span>
                 {site.email}
               </a>
-              <p className="flex items-center gap-3 text-paper/60">
-                <span className="grid h-10 w-10 place-items-center rounded-full border border-paper/15 font-mono text-[11px]">TZ</span>
+              <p className="flex items-center gap-3 text-snow/60">
+                <span className="grid h-10 w-10 place-items-center rounded-full border border-snow/15">
+                  <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden>
+                    <circle cx="8" cy="8" r="6" />
+                    <path d="M8 4.5V8l2.5 1.5" strokeLinecap="round" />
+                  </svg>
+                </span>
                 {site.location} · {site.timezone}
               </p>
             </div>
@@ -221,9 +273,9 @@ export function Contact() {
         </div>
 
         <Reveal delay={0.1}>
-          <form onSubmit={onSubmit} className="rounded-[24px] border border-paper/10 bg-paper/[0.03] p-6 backdrop-blur sm:p-8">
+          <form onSubmit={onSubmit} className="rounded-[24px] border border-snow/10 bg-snow/[0.03] p-5 backdrop-blur sm:p-8">
             <fieldset>
-              <legend className="font-mono text-[11px] uppercase tracking-[0.18em] text-paper/50">What do you need?</legend>
+              <legend className="text-[14px] font-medium text-snow/60">What do you need?</legend>
               <div className="mt-4 flex flex-wrap gap-2">
                 {projectTypes.map((p) => (
                   <button
@@ -232,7 +284,7 @@ export function Contact() {
                     onClick={() => setType(p)}
                     aria-pressed={type === p}
                     className={`rounded-full border px-3.5 py-2 text-[13px] transition-all duration-300 ${
-                      type === p ? "border-paper bg-paper text-ink" : "border-paper/15 text-paper/70 hover:border-paper/40"
+                      type === p ? "border-snow bg-snow text-night" : "border-snow/15 text-snow/70 hover:border-snow/40"
                     }`}
                   >
                     {p}
@@ -253,7 +305,7 @@ export function Contact() {
             </div>
 
             <fieldset className="mt-7">
-              <legend className="font-mono text-[11px] uppercase tracking-[0.18em] text-paper/50">Budget</legend>
+              <legend className="text-[14px] font-medium text-snow/60">Budget</legend>
               <div className="mt-4 flex flex-wrap gap-2">
                 {budgets.map((b) => (
                   <button
@@ -262,7 +314,7 @@ export function Contact() {
                     onClick={() => setBudget(b)}
                     aria-pressed={budget === b}
                     className={`rounded-full border px-3.5 py-2 text-[13px] transition-all duration-300 ${
-                      budget === b ? "border-paper bg-paper text-ink" : "border-paper/15 text-paper/70 hover:border-paper/40"
+                      budget === b ? "border-snow bg-snow text-night" : "border-snow/15 text-snow/70 hover:border-snow/40"
                     }`}
                   >
                     {b}
@@ -273,15 +325,15 @@ export function Contact() {
 
             <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
               <Magnetic>
-                <button type="submit" className="group inline-flex items-center gap-2 rounded-full bg-paper px-6 py-3.5 text-[15px] font-medium text-ink transition-colors duration-300 hover:bg-accent hover:text-white">
+                <button type="submit" className="group inline-flex items-center gap-2 rounded-full bg-snow px-6 py-3.5 text-[15px] font-medium text-night transition-colors duration-300 hover:bg-accent hover:text-white">
                   Send enquiry
                   <Arrow className="transition-transform duration-300 group-hover:translate-x-0.5" />
                 </button>
               </Magnetic>
               <AnimatePresence>
                 {sent && (
-                  <motion.p initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} className="text-[14px] text-paper/60">
-                    Your email app should open — thanks!
+                  <motion.p initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} className="text-[14px] text-snow/60">
+                    Your email app should open. Thanks!
                   </motion.p>
                 )}
               </AnimatePresence>
@@ -297,17 +349,17 @@ export function Contact() {
 
 export function Footer() {
   return (
-    <footer className="border-t border-paper/10 bg-ink text-paper">
+    <footer className="border-t border-snow/10 bg-night text-snow">
       <div className="container-site flex flex-col gap-10 py-14 md:flex-row md:items-start md:justify-between">
         <div className="max-w-xs">
           <Logo light />
-          <p className="mt-4 text-[14px] leading-relaxed text-paper/50">{site.description}</p>
+          <p className="mt-4 text-[14px] leading-relaxed text-snow/50">{site.description}</p>
         </div>
         <div className="grid grid-cols-2 gap-10 text-[14px] sm:gap-16">
           <ul className="space-y-2.5">
             {nav.map((n) => (
               <li key={n.href}>
-                <a href={n.href} className="text-paper/60 transition-colors hover:text-paper">
+                <a href={n.href} className="text-snow/60 transition-colors hover:text-snow">
                   {n.label}
                 </a>
               </li>
@@ -316,22 +368,31 @@ export function Footer() {
           <ul className="space-y-2.5">
             {site.socials.map((s) => (
               <li key={s.label}>
-                <a href={s.href} className="text-paper/60 transition-colors hover:text-paper" target="_blank" rel="noreferrer">
+                <a href={s.href} className="text-snow/60 transition-colors hover:text-snow" target="_blank" rel="noreferrer">
                   {s.label}
                 </a>
               </li>
             ))}
             <li>
-              <a href={`mailto:${site.email}`} className="text-paper/60 transition-colors hover:text-paper">
+              <a href={`mailto:${site.email}`} className="text-snow/60 transition-colors hover:text-snow">
                 Email
               </a>
             </li>
           </ul>
         </div>
       </div>
-      <div className="container-site flex flex-col justify-between gap-2 border-t border-paper/10 py-6 text-[12px] text-paper/40 sm:flex-row">
+      <div className="container-site flex flex-col justify-between gap-3 border-t border-snow/10 py-6 text-[12px] text-snow/40 sm:flex-row sm:items-center">
         <span>© {new Date().getFullYear()} {site.name}. All rights reserved.</span>
-        <span className="font-mono">{site.location}</span>
+        <div className="flex items-center gap-5">
+          <span>{site.location}</span>
+          <a
+            href="#top"
+            className="group inline-flex items-center gap-2 rounded-full border border-snow/15 px-3.5 py-1.5 text-snow/70 transition-colors hover:border-snow/40 hover:text-snow"
+          >
+            Back to top
+            <Arrow className="-rotate-90 transition-transform duration-300 group-hover:-translate-y-0.5" />
+          </a>
+        </div>
       </div>
     </footer>
   );
