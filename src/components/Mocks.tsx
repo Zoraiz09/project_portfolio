@@ -5,9 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { ease } from "./ui";
 
 /** Loops through `steps` (ms durations) while visible. Returns current step index. */
-function useLoop(durations: number[], ref: React.RefObject<HTMLElement | null>) {
+function useLoop(durations: number[], ref: React.RefObject<HTMLElement | null>, initial = 0) {
   const inView = useInView(ref, { margin: "-60px" });
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(initial);
   useEffect(() => {
     if (!inView) return;
     const id = setTimeout(() => setStep((s) => (s + 1) % durations.length), durations[step]);
@@ -30,7 +30,7 @@ export function McpEditorMock() {
   const done = step >= 5;
 
   return (
-    <div ref={ref} className="flex h-full min-h-[340px] flex-col rounded-2xl border border-line bg-[#111114] p-3 text-[11px] text-white/70 sm:p-4">
+    <div ref={ref} className="flex h-full min-h-[250px] flex-col rounded-[18px] border border-line bg-[#111114] p-3 sm:min-h-[340px] text-[11px] text-white/70 sm:p-4">
       {/* window bar */}
       <div className="flex items-center gap-1.5 pb-3">
         <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
@@ -106,10 +106,10 @@ const ragDurations = [800, 1200, 2400, 3200];
 /** Internal-docs assistant answering with citations. */
 export function RagChatMock() {
   const ref = useRef<HTMLDivElement>(null);
-  const step = useLoop(ragDurations, ref);
+  const step = useLoop(ragDurations, ref, 3);
 
   return (
-    <div ref={ref} className="flex h-full min-h-[340px] flex-col rounded-2xl border border-line bg-paper p-4 text-[13px]">
+    <div ref={ref} className="flex h-full min-h-[270px] flex-col rounded-[18px] border border-line bg-paper p-4 sm:min-h-[340px] text-[13px]">
       <div className="flex items-center justify-between border-b border-line pb-3">
         <span className="font-display font-semibold">Knowledge Assistant</span>
         <span className="flex items-center gap-1.5 font-mono text-[10px] text-muted">

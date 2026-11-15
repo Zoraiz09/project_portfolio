@@ -2,40 +2,72 @@
 
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { Fragment, useEffect, useState } from "react";
+import { Component, Fragment, useEffect, useState, type ReactNode } from "react";
 import { experience, hero, site } from "@/lib/content";
-import { Arrow, Magnetic, ease } from "./ui";
+import { Arrow, Magnetic, ease, usePhone } from "./ui";
 
 const Robot = dynamic(() => import("./Robot"), { ssr: false });
 
-function Rotator({ words }: { words: string[] }) {
-  const [i, setI] = useState(0);
-  const [text, setText] = useState("");
-  const [deleting, setDeleting] = useState(false);
+/** True if the browser can create a WebGL context (false on some old phones, battery-saver and privacy modes). */
+function canUseWebGL() {
+  try {
+    const c = document.createElement("canvas");
+    return !!(c.getContext("webgl2") || c.getContext("webgl"));
+  } catch {
+    return false;
+  }
+}
 
-  useEffect(() => {
-    const word = words[i % words.length];
-    let delay = deleting ? 35 : 70;
-    if (!deleting && text === word) delay = 1800;
-    if (deleting && text === "") delay = 250;
-    const id = setTimeout(() => {
-      if (!deleting && text === word) setDeleting(true);
-      else if (deleting && text === "") {
-        setDeleting(false);
-        setI((n) => n + 1);
-      } else setText(deleting ? word.slice(0, text.length - 1) : word.slice(0, text.length + 1));
-    }, delay);
-    return () => clearTimeout(id);
-  }, [text, deleting, i, words]);
+/** Shows the fallback if the 3D scene throws (e.g. the GPU context is lost). */
+class RobotBoundary extends Component<{ fallback: ReactNode; children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    return this.state.failed ? this.props.fallback : this.props.children;
+  }
+}
 
+/** Flat illustration of the robot, used when 3D isn't available. */
+function RobotFallback() {
   return (
-    <>
-      <span className="sr-only">{words.join(", ")}</span>
-      <span aria-hidden className="text-ink">
-        {text}
-        <span className="ml-0.5 inline-block h-[1.05em] w-[2px] translate-y-[0.15em] animate-caret bg-accent" />
-      </span>
-    </>
+    <div className="grid h-full w-full place-items-center" role="img" aria-label="Studio robot mascot">
+      <motion.svg
+        viewBox="0 0 200 220"
+        className="h-[78%] w-auto drop-shadow-[0_24px_30px_rgb(var(--shadow)/0.18)]"
+        animate={{ y: [0, -8, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        aria-hidden
+      >
+        <line x1="100" y1="22" x2="100" y2="44" className="stroke-faint" strokeWidth="4" strokeLinecap="round" />
+        <circle cx="100" cy="18" r="8" className="fill-accent" />
+        <rect x="42" y="42" width="116" height="86" rx="30" className="fill-surface stroke-line" strokeWidth="2" />
+        <rect x="56" y="60" width="80" height="52" rx="18" className="fill-night" />
+        <rect x="76" y="74" width="10" height="22" rx="5" className="fill-accent" />
+        <rect x="104" y="74" width="10" height="22" rx="5" className="fill-accent" />
+        <circle cx="148" cy="85" r="10" className="fill-subtle stroke-line" strokeWidth="2" />
+        <rect x="58" y="136" width="84" height="66" rx="24" className="fill-surface stroke-line" strokeWidth="2" />
+        <rect x="78" y="154" width="44" height="22" rx="7" className="fill-night" />
+        {[86, 96, 106].map((x) => (
+          <rect key={x} x={x} y="159" width="5" height="12" rx="2" className="fill-accent" />
+        ))}
+        <rect x="36" y="142" width="16" height="44" rx="8" className="fill-surface stroke-line" strokeWidth="2" />
+        <rect x="148" y="142" width="16" height="44" rx="8" className="fill-surface stroke-line" strokeWidth="2" />
+      </motion.svg>
+    </div>
+  );
+}
+
+function HeroVisual() {
+  const [webgl, setWebgl] = useState<boolean | null>(null);
+  useEffect(() => setWebgl(canUseWebGL()), []);
+  if (webgl === null) return null;
+  if (!webgl) return <RobotFallback />;
+  return (
+    <RobotBoundary fallback={<RobotFallback />}>
+      <Robot />
+    </RobotBoundary>
   );
 }
 
@@ -51,33 +83,27 @@ export default function Hero() {
     ...hero.titleAfter.split(" ").map((w) => ({ w, italic: false })),
   ];
 
+  // One robot canvas only: small beside the headline on phones, large column on tablet/desktop.
+  const phone = usePhone();
+  // Phones get a poster-style headline: "We build / intelligent / software / that ships."
+  const breakAfter = (w: string, italic: boolean) => italic || w === hero.titleBefore.split(" ").at(-1) || w === hero.titleAfter.split(" ")[0];
+
   return (
-    <section id="top" className="relative overflow-hidden pt-[68px]">
-      {/* Background: faint dot grid fading out at the edges + soft accent glow */}
-      <div
-        aria-hidden
-        className="dot-grid pointer-events-none absolute inset-0"
-        style={{ maskImage: "radial-gradient(ellipse 70% 60% at 65% 45%, black 20%, transparent 75%)", WebkitMaskImage: "radial-gradient(ellipse 70% 60% at 65% 45%, black 20%, transparent 75%)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute right-[-10%] top-[10%] h-[520px] w-[520px] rounded-full opacity-60 blur-[110px]"
-        style={{ background: "radial-gradient(circle, rgba(47,75,255,0.16), transparent 70%)" }}
-      />
-
-      <div className="container-site relative grid min-h-[calc(100svh-68px)] items-center gap-6 py-10 lg:grid-cols-[1.08fr_1fr] lg:gap-4 lg:py-0">
-        <div className="relative z-10 order-2 lg:order-1">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease }}
-            className="inline-flex items-center gap-2.5 rounded-full border border-line bg-surface/80 py-1.5 pl-2.5 pr-4 text-[13px] text-muted shadow-card backdrop-blur"
-          >
-            <span className="h-2 w-2 animate-pulseDot rounded-full bg-green-500" />
-            {hero.badge}
-          </motion.div>
-
-          <h1 className="mt-7 font-display text-[2.9rem] font-semibold leading-[0.98] tracking-tightest sm:text-[4rem] lg:text-[3.9rem] xl:text-[4.5rem]">
+    <section id="top" className="relative overflow-hidden pt-[60px] md:pt-[68px]">
+      <div className="container-site relative grid items-center pb-10 pt-6 sm:py-12 lg:min-h-[calc(100svh-68px)] lg:grid-cols-[1.2fr_1fr] lg:content-center lg:gap-x-4 lg:py-0">
+        <div className="relative z-10 order-1 lg:col-start-1 lg:row-start-1">
+          {/* Phone: small robot peeking in at the top-right, beside the first lines of the headline */}
+          {phone && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.9, ease, delay: 0.5 }}
+              className="absolute -right-4 -top-3 z-0 h-[168px] w-[150px]"
+            >
+              <HeroVisual />
+            </motion.div>
+          )}
+          <h1 className="pointer-events-none relative z-10 mt-2 font-display text-[3.1rem] font-bold leading-[0.95] tracking-tightest sm:mt-0 sm:text-[4rem] md:pointer-events-auto lg:text-[4rem] xl:text-[4.6rem] 2xl:text-[5.2rem]">
             {titleWords.map(({ w, italic }, i) => (
               <Fragment key={i}>
               <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
@@ -86,14 +112,13 @@ export default function Hero() {
                   variants={word}
                   initial="hidden"
                   animate="show"
-                  className={`inline-block ${italic ? "pr-[0.06em] font-serif font-normal italic tracking-normal text-accent" : ""}`}
+                  className="inline-block"
                 >
                   {w}
                 </motion.span>
-                {i < titleWords.length - 1 && !italic && "\u00A0"}
+                {i < titleWords.length - 1 && "\u00A0"}
               </span>
-              {italic && <br className="hidden sm:block" />}
-              {italic && <span className="sm:hidden"> </span>}
+              {breakAfter(w, italic) && <br className={italic ? "" : "md:hidden"} />}
               </Fragment>
             ))}
           </h1>
@@ -101,17 +126,8 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease, delay: 0.75 }}
-            className="mt-7 font-mono text-[15px] text-muted sm:text-base"
-          >
-            <span className="text-faint">{"// "}</span>we build <Rotator words={hero.rotating} />
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease, delay: 0.85 }}
-            className="mt-5 max-w-[34rem] text-[17px] leading-relaxed text-muted"
+            className="mt-6 max-w-[36rem] text-[15px] leading-relaxed text-muted sm:mt-8 sm:text-[17px]"
           >
             {hero.sub}
           </motion.p>
@@ -120,48 +136,44 @@ export default function Hero() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease, delay: 0.95 }}
-            className="mt-9 flex flex-wrap items-center gap-3"
+            className="mt-6 grid grid-cols-2 gap-2.5 sm:mt-9 sm:flex sm:flex-wrap sm:items-center sm:gap-3"
           >
             <Magnetic>
-              <a href={site.calendly || "#contact"} className="btn-primary group">
+              <a href={site.calendly || "#contact"} className="btn-primary group w-full justify-center !px-4 sm:w-auto sm:!px-6">
                 Start a project
                 <Arrow className="transition-transform duration-300 group-hover:translate-x-0.5" />
               </a>
             </Magnetic>
             <Magnetic>
-              <a href="#work" className="btn-ghost">
+              <a href="#work" className="btn-ghost w-full justify-center !px-4 sm:w-auto sm:!px-6">
                 See our work
               </a>
             </Magnetic>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.2 }}
-            className="mt-12 flex flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:items-center sm:gap-6"
-          >
-            <span className="label shrink-0">Experience with</span>
-            <ul className="flex flex-wrap gap-x-5 gap-y-1 text-[14px] font-medium text-ink/70">
-              {experience.slice(0, 3).map((e) => (
-                <li key={e}>{e}</li>
-              ))}
-            </ul>
-          </motion.div>
         </div>
 
         {/* Robot */}
-        <div className="relative order-1 h-[340px] sm:h-[440px] lg:order-2 lg:h-[640px]">
-          <Robot />
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease, delay: 1.6 }}
-            className="pointer-events-none absolute bottom-6 right-2 hidden items-center gap-2 rounded-full border border-line bg-surface/85 px-3.5 py-2 font-mono text-[11px] text-muted shadow-card backdrop-blur sm:flex lg:bottom-16"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" /> try clicking me
-          </motion.div>
+        <div className="relative order-2 my-6 hidden h-[420px] md:block lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:my-0 lg:h-[640px]">
+          {phone === false && <HeroVisual />}
         </div>
+
+        {/* Experience row — below the robot on phones, under the text on desktop */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.2 }}
+          className="relative z-10 order-3 mt-8 flex flex-col gap-2 border-t border-line pt-4 sm:mt-0 sm:flex-row sm:items-center sm:gap-6 sm:pt-6 lg:col-start-1 lg:row-start-2 lg:mt-12"
+        >
+          <span className="label shrink-0">Experience with</span>
+          <ul className="flex flex-wrap gap-x-5 gap-y-1 font-display text-[15px] font-semibold tracking-tight text-ink/45 sm:gap-x-7 sm:text-[17px]">
+            {experience.slice(0, 3).map((e) => (
+              <li key={e} className="transition-colors duration-300 hover:text-ink">
+                {e}
+              </li>
+            ))}
+          </ul>
+        </motion.div>
       </div>
 
     </section>

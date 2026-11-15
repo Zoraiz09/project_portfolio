@@ -2,37 +2,42 @@ import type { Config } from "tailwindcss";
 
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
-        paper: "#FAFAF7",
-        surface: "#FFFFFF",
-        subtle: "#F2F1EC",
-        line: "#E7E5E0",
-        ink: "#16161A",
-        muted: "#6B6B70",
-        faint: "#A3A29D",
+        // Theme-aware tokens (values live in globals.css and flip in dark mode)
+        paper: "rgb(var(--paper) / <alpha-value>)",
+        surface: "rgb(var(--surface) / <alpha-value>)",
+        subtle: "rgb(var(--subtle) / <alpha-value>)",
+        line: "rgb(var(--line) / <alpha-value>)",
+        ink: "rgb(var(--ink) / <alpha-value>)",
+        muted: "rgb(var(--muted) / <alpha-value>)",
+        faint: "rgb(var(--faint) / <alpha-value>)",
         accent: {
-          DEFAULT: "#2F4BFF",
-          soft: "#EEF0FF",
-          deep: "#1F35D6",
+          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
+          soft: "rgb(var(--accent-soft) / <alpha-value>)",
+          deep: "rgb(var(--accent-deep) / <alpha-value>)",
         },
+        // Fixed tokens for sections that stay dark in both themes (contact, footer)
+        night: "#131316",
+        snow: "#FAFAF7",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "var(--font-inter)", "sans-serif"],
+        sans: ["var(--font-body)", "system-ui", "sans-serif"],
+        display: ["var(--font-body)", "system-ui", "sans-serif"],
         serif: ["var(--font-serif)", "Georgia", "serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       letterSpacing: {
-        tightest: "-0.045em",
+        tightest: "-0.04em",
       },
       maxWidth: {
-        site: "1240px",
+        site: "1680px",
       },
       boxShadow: {
-        card: "0 1px 2px rgba(22,22,26,0.04), 0 8px 24px -12px rgba(22,22,26,0.10)",
-        lift: "0 2px 4px rgba(22,22,26,0.04), 0 24px 48px -20px rgba(22,22,26,0.18)",
+        card: "0 1px 2px rgb(var(--shadow) / 0.04), 0 8px 24px -12px rgb(var(--shadow) / 0.10)",
+        lift: "0 2px 4px rgb(var(--shadow) / 0.04), 0 24px 48px -20px rgb(var(--shadow) / 0.18)",
       },
       transitionTimingFunction: {
         out: "cubic-bezier(0.22, 1, 0.36, 1)",
