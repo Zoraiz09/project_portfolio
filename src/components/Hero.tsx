@@ -165,9 +165,9 @@ export default function Hero() {
           transition={{ duration: 1, delay: 1.2 }}
           className="relative z-10 order-3 mt-8 flex flex-col gap-2 border-t border-line pt-4 sm:mt-0 sm:flex-row sm:items-center sm:gap-6 sm:pt-6 lg:col-start-1 lg:row-start-2 lg:mt-12"
         >
-          <span className="label shrink-0">Experience with</span>
+          <span className="label shrink-0">Built for</span>
           <ul className="flex flex-wrap gap-x-5 gap-y-1 font-display text-[15px] font-semibold tracking-tight text-ink/45 sm:gap-x-7 sm:text-[17px]">
-            {experience.slice(0, 3).map((e) => (
+            {experience.map((e) => (
               <li key={e} className="transition-colors duration-300 hover:text-ink">
                 {e}
               </li>

@@ -1,16 +1,18 @@
 /**
  * All site copy lives here. Edit this file to change text without touching components.
- * TODO: replace `name`, `email` and `calendly` once the studio name & domain are decided.
  */
 
 export const site = {
-  name: "Studio",
-  email: "hello@yourstudio.com",
+  name: "Rays",
+  tagline: "Creative web development softwares",
+  email: "info@raysglobals.com",
+  phone: "+971 55 553 4457",
+  address: "PO Box 21408, Business Bay, Dubai, UAE",
   calendly: "", // e.g. "https://cal.com/yourstudio/intro" — when empty, "Book a call" scrolls to the contact form
-  location: "Pakistan · Working worldwide",
-  timezone: "GMT+5",
+  location: "Dubai, UAE · Working worldwide",
+  timezone: "GMT+4",
   description:
-    "An AI-first software studio. We build AI agents, RAG assistants, MCP integrations and full-stack products, from idea to production.",
+    "We build websites, apps and smart AI assistants that save businesses time and money, from first idea to launch.",
   socials: [
     { label: "LinkedIn", href: "#" },
     { label: "GitHub", href: "#" },
@@ -21,20 +23,21 @@ export const nav = [
   { label: "Services", href: "#services" },
   { label: "Work", href: "#work" },
   { label: "Process", href: "#process" },
-  { label: "Studio", href: "#studio" },
+  { label: "About", href: "#studio" },
   { label: "FAQ", href: "#faq" },
 ];
 
 export const hero = {
   badge: "Available for new projects",
   titleBefore: "We build",
-  titleItalic: "intelligent",
-  titleAfter: "software that ships.",
-  rotating: ["AI agents", "RAG assistants", "MCP integrations", "SaaS products", "scalable backends"],
-  sub: "An AI-first development studio helping companies turn AI from a demo into a product. We design, engineer and deploy it end to end.",
+  titleItalic: "smart",
+  titleAfter: "software that works.",
+  rotating: ["AI assistants", "websites", "mobile-friendly apps", "online platforms", "business tools"],
+  sub: "We help businesses use AI to save time and serve customers better. Tell us what you need; we design it, build it and launch it for you.",
 };
 
-export const experience = ["Kinolane", "Attock Refinery Limited", "AIGenMat", "Project IRIS"];
+// Industries shown in the hero row.
+export const experience = ["Farming", "Finance", "Energy", "Media"];
 
 export type Service = {
   id: string;
@@ -43,55 +46,152 @@ export type Service = {
   points: string[];
   size: "lg" | "md" | "sm";
   visual: "agent" | "rag" | "saas" | "backend" | "ui" | "pipeline";
+  /** Plain-English explanation shown when a visitor clicks the service. */
+  details: {
+    simple: string;
+    examples: string[];
+    youGet: string[];
+    goodFit: string;
+  };
 };
 
 export const services: Service[] = [
   {
     id: "agents",
-    title: "AI Agents & MCP Integrations",
-    body: "We connect AI to your software. Using the Model Context Protocol, we expose your product's features as tools an AI can use, so users get complex work done with a single prompt.",
-    points: ["MCP servers", "Tool calling", "Multi-agent workflows", "Prompt-to-action UX"],
+    title: "AI Assistants That Do the Work",
+    body: "An AI assistant built into your software. Your team or customers simply type what they want, and the assistant does the steps for them.",
+    points: ["Works inside your software", "Does tasks for you", "Just type a request", "Saves hours every week"],
     size: "lg",
+    details: {
+      simple:
+        "Think of it as hiring a smart digital assistant that can actually use your software. Instead of clicking through menus, your team or customers just type what they want in everyday words, and the assistant does the steps for them.",
+      examples: [
+        "\"Make a report of last month's sales and email it to the team\" — done in one message.",
+        "A customer types \"cancel my order and refund me\" and it's handled without waiting for support.",
+        "A video editor where you say \"cut the intro and add subtitles\" instead of doing it by hand.",
+      ],
+      youGet: [
+        "An assistant connected safely to your existing system",
+        "Clear limits on what it can and can't do",
+        "A simple chat box your users already know how to use",
+      ],
+      goodFit: "Businesses whose software has lots of buttons and steps, and who want users to get things done faster.",
+    },
     visual: "agent",
   },
   {
     id: "rag",
-    title: "RAG Assistants",
-    body: "Chat with your documents, codebase or knowledge base and get cited answers your team can trust.",
-    points: ["Hybrid search", "Reranking", "Citations"],
+    title: "Ask-Your-Documents Assistant",
+    body: "A private assistant that has read your company files and answers questions instantly, showing where each answer came from.",
+    points: ["Instant answers", "Shows its sources", "Private & secure"],
     size: "md",
+    details: {
+      simple:
+        "A private \"ask me anything\" assistant that has read all of your company's documents. Ask it a question in plain words and it gives you the answer, plus shows exactly which document and page it came from, so you can trust it.",
+      examples: [
+        "Staff ask \"What's our leave policy for new joiners?\" and get the answer in seconds.",
+        "Sales teams find the right product spec without digging through folders.",
+        "Customers get accurate answers from your help guides, 24/7.",
+      ],
+      youGet: [
+        "A chat assistant trained on your own files",
+        "Answers with links back to the original source",
+        "Your documents kept private and secure",
+      ],
+      goodFit: "Teams that waste time searching through manuals, policies, contracts or old emails.",
+    },
     visual: "rag",
   },
   {
     id: "saas",
-    title: "AI-powered SaaS & MVPs",
-    body: "From a one-line idea to a launched product, with AI built in from day one.",
-    points: ["Next.js", "Auth & billing", "Dashboards"],
+    title: "New Apps & Online Products",
+    body: "Got an idea for an app or online service? We turn it into a real product people can sign up to and pay for.",
+    points: ["From idea to launch", "Sign-up & payments", "Easy dashboards"],
     size: "md",
+    details: {
+      simple:
+        "You have an idea for an app or online product. We turn it into a real, working product people can sign up to, log in to and pay for — with smart AI features included from the start.",
+      examples: [
+        "A booking platform that suggests the best time slots automatically.",
+        "A dashboard that writes a plain-English summary of your numbers each week.",
+        "A first version you can show investors or early customers.",
+      ],
+      youGet: [
+        "A launched website or web app, not just designs",
+        "Sign-up, login and online payments set up",
+        "Easy-to-read dashboards for you and your users",
+      ],
+      goodFit: "Founders and businesses with an idea who want a real product quickly, without building a tech team first.",
+    },
     visual: "saas",
   },
   {
     id: "backend",
-    title: "Backend & Cloud",
-    body: "APIs, databases and infrastructure that hold up under real load.",
-    points: ["FastAPI · Node", "PostgreSQL", "Docker"],
+    title: "Fast, Reliable Systems",
+    body: "The behind-the-scenes engine that keeps your app quick, safe and running, even on your busiest day.",
+    points: ["Always online", "Data kept safe", "Handles growth"],
     size: "sm",
+    details: {
+      simple:
+        "This is the engine room behind your app — the part users never see. We build it so your app stays fast, keeps data safe, and doesn't crash when lots of people use it at once.",
+      examples: [
+        "Your app keeps working smoothly during a big sale or launch day.",
+        "Different systems (shop, accounts, stock) talk to each other automatically.",
+        "Data is backed up and protected if something goes wrong.",
+      ],
+      youGet: [
+        "Reliable servers and a well-organised database",
+        "Connections between your existing tools",
+        "Monitoring so problems are caught early",
+      ],
+      goodFit: "Businesses whose app is slow, breaks under pressure, or is getting ready to grow.",
+    },
     visual: "backend",
   },
   {
     id: "pipeline",
-    title: "Data & Model Deployment",
-    body: "Pipelines that clean, embed and serve data to models in production.",
-    points: ["ETL", "Embeddings", "Inference"],
+    title: "Putting Your Data to Work",
+    body: "We gather and tidy up your business information so AI can use it to give accurate, up-to-date answers.",
+    points: ["Collects your data", "Cleans it up", "Keeps AI up to date"],
     size: "sm",
+    details: {
+      simple:
+        "AI is only as good as the information it's given. We collect your messy data from different places, tidy it up, and feed it to the AI automatically, so its answers stay accurate and up to date.",
+      examples: [
+        "New sales figures flow into your AI reports every morning without anyone copying them.",
+        "Thousands of scanned documents are cleaned and made searchable.",
+        "An AI model you've tested is put live so customers can actually use it.",
+      ],
+      youGet: [
+        "Automatic data collection and clean-up",
+        "AI that always works with the latest information",
+        "A tested AI model running live, not stuck on a laptop",
+      ],
+      goodFit: "Companies sitting on lots of data (spreadsheets, files, systems) that they want AI to make use of.",
+    },
     visual: "pipeline",
   },
   {
     id: "ui",
-    title: "Product Design & Frontend",
-    body: "Fast, accessible interfaces built pixel-faithfully from design.",
-    points: ["React", "Design systems", "Motion"],
+    title: "Website & App Design",
+    body: "Beautiful, easy-to-use screens that look great and work smoothly on phones, tablets and computers.",
+    points: ["Modern design", "Works on any device", "Easy to use"],
     size: "sm",
+    details: {
+      simple:
+        "This is everything your users see and click. We design and build screens that look great, are easy to understand, load quickly and work well on phones, tablets and computers.",
+      examples: [
+        "A confusing old website redesigned so customers find what they need.",
+        "A mobile-friendly app that feels smooth and modern.",
+        "Your designer's mockups turned into a real, working website.",
+      ],
+      youGet: [
+        "Clean, modern design that matches your brand",
+        "Works on every screen size",
+        "Accessible for all users, including people with disabilities",
+      ],
+      goodFit: "Anyone whose website or app feels outdated, slow or hard to use.",
+    },
     visual: "ui",
   },
 ];
@@ -111,168 +211,168 @@ export type CaseStudy = {
 export const work: CaseStudy[] = [
   {
     id: "mcp-editor",
-    tag: "AI Agents · MCP",
-    title: "Prompt-to-edit AI for a video editor",
-    client: "Kinolane, media platform",
-    problem: "Editing meant learning every tool in the editor and doing each step by hand.",
+    tag: "AI Assistant",
+    title: "A video editor you can talk to",
+    client: "Media platform",
+    problem: "Editing videos meant learning lots of tools and doing every step by hand.",
     solution:
-      "We built an MCP server that exposes the editor's capabilities as AI tools. Users describe the edit in plain language; the model plans the steps and executes them through MCP.",
+      "We added an AI assistant to the editor. Users simply type what they want, such as \"cut the intro and add subtitles\", and the assistant does every step for them.",
     highlights: [
-      "Editor actions exposed as typed MCP tools",
-      "LLM plans multi-step edits from one prompt",
-      "Natural-language interface on top of a production editor",
+      "Edits done from one simple sentence",
+      "No need to learn complicated editing tools",
+      "Works inside the platform people already use",
     ],
-    stack: ["MCP", "LLM tool calling", "TypeScript", "Remotion"],
+    stack: ["AI assistant", "Video editing"],
     visual: { type: "mcp" },
   },
   {
     id: "codesage",
-    tag: "AI · RAG · Dev tools",
-    title: "CodeSage AI: code review that runs on your machine",
-    client: "Product build",
-    problem: "Teams want AI code review without sending proprietary source code to a third party.",
+    tag: "AI for software teams",
+    title: "CodeSage: an AI that checks code for mistakes",
+    client: "Our own product",
+    problem: "Software teams want AI to check their work, but don't want to send their private code to outside companies.",
     solution:
-      "A private review platform combining static analysis, AI reviews, generated docs and a RAG chat over the repository with file-and-line citations.",
+      "A tool that runs on the team's own computers. It spots mistakes and security risks, writes explanations, and answers questions about the project, pointing to the exact place it found each answer.",
     highlights: [
-      "RAG chat with file/line citations; a 487-chunk repo indexes in about 2 minutes on CPU",
-      "Security scans for secrets, SQL injection and exposed keys",
-      "AI reviews built from stats, never raw source; 38 passing tests",
+      "Answers questions about the project with exact references",
+      "Flags security risks such as leaked passwords",
+      "Private: the code never leaves the company",
     ],
-    stack: ["Python", "ChromaDB", "OpenRouter", "FastAPI"],
-    visual: { type: "image", src: "/work/codesage.webp", alt: "CodeSage AI dashboard" },
+    stack: ["AI", "Security checks"],
+    visual: { type: "image", src: "/work/codesage.webp", alt: "CodeSage dashboard" },
   },
   {
     id: "enterprise-rag",
-    tag: "Enterprise AI",
-    title: "Internal knowledge assistant for an energy company",
-    client: "Oil & gas refinery",
-    problem: "Employees lost time searching scattered internal documents for answers.",
+    tag: "Business AI",
+    title: "An \"ask me anything\" assistant for an energy company",
+    client: "Oil & gas company",
+    problem: "Staff wasted hours digging through piles of internal documents to find answers.",
     solution:
-      "A secure retrieval-augmented assistant over company documents, with semantic chunking, hybrid search and reranking for precise, relevant answers.",
+      "A private assistant that has read the company's documents. Staff ask a question in plain words and get a clear answer, along with the document and page it came from.",
     highlights: [
-      "Semantic chunking that preserves document context",
-      "Hybrid search + reranking for higher answer accuracy",
-      "Deployed securely against internal documents",
+      "Answers in seconds instead of hours",
+      "Every answer shows its source, so it can be trusted",
+      "Company documents stay private and secure",
     ],
-    stack: ["RAG", "Vector search", "Reranking", "Python"],
+    stack: ["AI assistant", "Document search"],
     visual: { type: "rag" },
   },
   {
     id: "systemforge",
-    tag: "Multi-agent AI",
-    title: "SystemForge: an AI software architect",
-    client: "Product build",
-    problem: "Planning a system's architecture takes senior time most early teams don't have.",
+    tag: "AI planning tool",
+    title: "SystemForge: an AI that plans software projects",
+    client: "Our own product",
+    problem: "Planning a new software project properly usually needs expensive senior experts.",
     solution:
-      "Turns a one-line idea into an explorable architecture map, then calls specialist agents (cost, risk, scaling, API, database) and an architecture council that debates to a verdict.",
+      "Type a one-line idea and it draws a clear, clickable plan of the whole system. A team of AI \"advisers\" then reviews costs, risks and growth, and agrees on a final recommendation.",
     highlights: [
-      "Interactive canvas: click any node for stack and dependencies",
-      "7 specialist agents plus a debating council",
-      "Scored reports exportable as PDF",
+      "Turns a one-line idea into a visual plan",
+      "AI advisers review cost, risk and growth",
+      "Download the full report as a PDF",
     ],
-    stack: ["Next.js", "React Flow", "Groq", "Zustand"],
-    visual: { type: "image", src: "/work/systemforge.webp", alt: "SystemForge landing page" },
+    stack: ["AI advisers", "Visual planning"],
+    visual: { type: "image", src: "/work/systemforge.webp", alt: "SystemForge home page" },
   },
   {
     id: "cashdash",
-    tag: "FinTech · Full-stack",
-    title: "Exchange & ledger platform for a currency business",
-    client: "Retail money-exchange business",
-    problem: "Rates, vault stock and who-owes-whom were tracked by hand across notebooks.",
+    tag: "Finance software",
+    title: "A complete system for a currency exchange business",
+    client: "Money-exchange business",
+    problem: "Exchange rates, cash in the safe and who owed what were all tracked by hand in notebooks.",
     solution:
-      "One platform for buy/sell tickets, live vault stock and per-currency debtor/creditor ledgers, with spot and deferred settlement.",
+      "One simple system for buying and selling currency, tracking cash in the safe, and keeping a record of who owes money and who is owed.",
     highlights: [
-      "Instant rate × amount tickets with live receipt preview",
-      "Receivables and payables tracked per currency",
-      "Vault always reconciles with real cash on hand",
+      "Instant price calculation and printable receipts",
+      "Clear record of money owed, per currency",
+      "Cash in the system always matches cash in the safe",
     ],
-    stack: ["Next.js", "PostgreSQL", "SQL functions"],
-    visual: { type: "image", src: "/work/cashdash.webp", alt: "Exchange platform dashboard" },
+    stack: ["Web app", "Accounting"],
+    visual: { type: "image", src: "/work/cashdash.webp", alt: "Currency exchange dashboard" },
   },
 ];
 
 export const moreWork = [
   {
     title: "Project IRIS",
-    body: "Multi-tenant AgriTech SaaS: live field telemetry, row-level security and AI irrigation recommendations.",
-    tag: "SaaS · AI",
+    body: "Smart farming software: live readings from the field and AI advice on when and how much to water crops.",
+    tag: "Farming · AI",
     img: "/work/iris.webp",
   },
   {
     title: "Dewy",
-    body: "A mobile-first product built pixel-faithfully from design, with a hand-built glass design system.",
-    tag: "Frontend · Design",
+    body: "A beautiful mobile app built exactly to the designer's vision, with a smooth, modern look.",
+    tag: "App design",
     img: "/work/dewy.webp",
   },
 ];
 
 export const aiPipeline = {
   steps: [
-    { k: "Data", d: "Your docs, databases, APIs" },
-    { k: "Retrieval", d: "Chunking, embeddings, hybrid search" },
-    { k: "Model", d: "The right LLM for cost & quality" },
-    { k: "Tools", d: "MCP & function calling into your systems" },
-    { k: "Product", d: "A reliable feature your users trust" },
+    { k: "Your information", d: "Your documents, spreadsheets and systems" },
+    { k: "Organise", d: "We sort and tidy it so it's easy to search" },
+    { k: "The right AI", d: "We pick the AI that gives the best results for the price" },
+    { k: "Connect", d: "We link the AI to the tools you already use" },
+    { k: "Ready to use", d: "A reliable feature your customers can trust" },
   ],
   principles: [
-    { t: "Your data stays yours", d: "Private deployments, scoped access, and no raw data sent where it doesn't need to go." },
-    { t: "Answers with sources", d: "Retrieval with citations so every answer can be checked, not guessed." },
-    { t: "Predictable costs", d: "Model routing, caching and token budgets designed in from the start." },
-    { t: "Tested, not hoped", d: "Evaluation sets and automated tests before anything reaches your users." },
+    { t: "Your data stays yours", d: "Your information stays private and is only shared where it's truly needed." },
+    { t: "Answers you can check", d: "The AI shows where every answer came from, so nothing is guessed." },
+    { t: "No surprise bills", d: "We design it to keep monthly running costs low and predictable." },
+    { t: "Tested before launch", d: "We test everything thoroughly before your customers ever see it." },
   ],
 };
 
 export const process = [
-  { t: "Discovery call", d: "We learn your goals, users and constraints. You get honest advice, even if that advice is not to build.", time: "Day 1" },
-  { t: "Scope & proposal", d: "A clear plan, fixed milestones and a price you can approve.", time: "Week 1" },
-  { t: "Proof of concept", d: "For AI work, a working prototype on your real data, so you see it before you commit.", time: "Weeks 1–2" },
-  { t: "Build in sprints", d: "Weekly demos and a live staging link. No black boxes.", time: "Ongoing" },
-  { t: "Launch & support", d: "Deployment, monitoring and handover docs. We stay on to keep improving it.", time: "Launch +" },
+  { t: "Free first call", d: "We listen to your goals and give honest advice, even if that means telling you not to build.", time: "Day 1" },
+  { t: "Clear plan & price", d: "You get a simple written plan, timeline and a fixed price to approve.", time: "Week 1" },
+  { t: "Quick trial version", d: "For AI projects, we build a small working version with your own information, so you see it work before committing.", time: "Weeks 1–2" },
+  { t: "Building, step by step", d: "We show you progress every week, with a link you can click and try yourself.", time: "Ongoing" },
+  { t: "Launch & support", d: "We put it live, keep an eye on it, and stay on to help it improve.", time: "After launch" },
 ];
 
 export const studio = {
-  mission: "We're an AI-first software studio helping companies turn AI from a demo into a product.",
+  mission: "We help businesses turn AI from a buzzword into something that actually saves them time and money.",
   values: [
-    { t: "Senior engineering on every project", d: "The people on your discovery call are the people writing your code." },
-    { t: "Weekly demos, no black boxes", d: "You see real progress every week, on a link you can click." },
-    { t: "Built to scale", d: "Architecture that survives your first ten thousand users and the next hundred thousand." },
+    { t: "Experienced people on every project", d: "The people you speak to on day one are the people building your product." },
+    { t: "See progress every week", d: "No waiting in the dark. Every week you see and try what we've built." },
+    { t: "Built to grow with you", d: "Works just as well with your first hundred customers as with your first hundred thousand." },
   ],
   stats: [
-    { n: 8, suffix: "+", l: "Products & systems shipped" },
+    { n: 8, suffix: "+", l: "Products & systems launched" },
     { n: 5, suffix: "", l: "Industries served" },
-    { n: 3, suffix: "", l: "Companies we've engineered for" },
-    { n: 24, suffix: "h", l: "Response time, any time zone" },
+    { n: 100, suffix: "%", l: "Ownership of everything we build is yours" },
+    { n: 24, suffix: "h", l: "Reply time, wherever you are" },
   ],
-  industries: ["AgriTech", "FinTech", "Energy", "Media", "Developer Tools"],
+  industries: ["Farming", "Finance", "Energy", "Media", "Software"],
 };
 
 export const stack = [
-  { group: "AI", items: ["LLM APIs", "MCP", "RAG", "PyTorch", "ChromaDB", "Embeddings", "Agents"] },
-  { group: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind", "Framer Motion"] },
-  { group: "Backend", items: ["Python", "FastAPI", "Node.js", "PostgreSQL", "Supabase"] },
-  { group: "Cloud", items: ["Docker", "Linux", "Vercel", "CI/CD", "Git"] },
+  { group: "Smart AI", items: ["ChatGPT-style AI", "AI assistants", "Document search", "Automation"] },
+  { group: "What users see", items: ["Websites", "Web apps", "Mobile-friendly design", "Dashboards"] },
+  { group: "Behind the scenes", items: ["Secure databases", "Payments", "User accounts", "Connections to your tools"] },
+  { group: "Hosting & care", items: ["Reliable hosting", "Automatic backups", "Monitoring", "Ongoing updates"] },
 ];
 
 export const engagement = [
   {
-    name: "AI Proof of Concept",
-    for: "Validate an AI idea fast",
-    points: ["Working prototype on your data", "Feasibility & cost report", "Clear path to production"],
-    cta: "Start with a PoC",
+    name: "Trial Version",
+    for: "Test an AI idea quickly",
+    points: ["A small working version using your information", "Honest report on cost and what's possible", "Clear next steps"],
+    cta: "Start with a trial",
     featured: false,
   },
   {
-    name: "Fixed-scope Project",
-    for: "MVPs, products & integrations",
-    points: ["Agreed scope & milestones", "Weekly demos", "Launch, docs & handover", "30 days of post-launch support"],
+    name: "Full Project",
+    for: "New apps, websites & AI features",
+    points: ["Agreed plan, timeline & price", "Progress shown every week", "Launch, guides & handover", "30 days of free support after launch"],
     cta: "Plan a project",
     featured: true,
   },
   {
-    name: "Monthly Retainer",
-    for: "Ongoing development",
-    points: ["Dedicated engineering hours", "Priority turnaround", "Continuous improvement"],
-    cta: "Discuss a retainer",
+    name: "Monthly Support",
+    for: "Ongoing help & improvements",
+    points: ["A set number of hours each month", "Your requests handled first", "Constant improvements"],
+    cta: "Discuss monthly support",
     featured: false,
   },
 ];
@@ -281,10 +381,11 @@ export const engagement = [
 export const testimonials: { quote: string; name: string; role: string }[] = [];
 
 export const faq = [
-  { q: "Can you add AI to our existing product?", a: "Yes, that's most of what we do. Using MCP and tool calling we expose your product's features to an AI model, so users can work through natural language without you rebuilding anything." },
-  { q: "Is our data safe?", a: "We design for privacy first: scoped access, private or self-hosted models where needed, and nothing sent to a model that doesn't need to be. We're happy to sign an NDA before any discussion." },
-  { q: "Which AI models do you use?", a: "Whichever fits the job. We work with the major commercial LLMs and open-source models, and choose based on quality, latency, cost and where your data is allowed to go." },
-  { q: "What will AI cost us to run each month?", a: "We estimate it during the proof of concept and design for it. Caching, model routing and token budgets keep running costs predictable." },
-  { q: "How do we work across time zones?", a: `We're based in ${"GMT+5"} and keep regular overlap hours with Europe, the Middle East and the US East Coast, plus async updates and weekly demo calls.` },
-  { q: "Who owns the code?", a: "You do. All code, designs and IP are transferred to you on payment, and you get full repository access from day one." },
+  { q: "Can you add AI to software we already have?", a: "Yes, that's most of what we do. We connect an AI assistant to your existing software so people can simply type what they need, without you having to rebuild anything." },
+  { q: "Is our information safe?", a: "Yes. We only give the AI access to what it truly needs, can keep everything on private servers, and are happy to sign a confidentiality agreement before we even start talking." },
+  { q: "Which AI do you use?", a: "Whichever suits your project best. We work with all the major AI providers (like the ones behind ChatGPT) and pick based on quality, speed, cost and privacy needs." },
+  { q: "How much will the AI cost to run each month?", a: "We give you an estimate during the trial version and design the system to keep costs low and predictable, so there are no surprise bills." },
+  { q: "Do I need to be technical to work with you?", a: "Not at all. We explain everything in plain language, handle all the technical work, and show you progress you can click and try every week." },
+  { q: "How do we work across time zones?", a: "We're based in Dubai, UAE (GMT+4) and overlap working hours with Europe, the Middle East, Asia and the US East Coast, with written updates every day and a video call each week." },
+  { q: "Who owns what you build?", a: "You do. Everything we create belongs to you once it's paid for, and you have full access from day one." },
 ];
