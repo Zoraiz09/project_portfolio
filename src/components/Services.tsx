@@ -1,17 +1,17 @@
 "use client";
 
 import { AnimatePresence, motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { services, type Service } from "@/lib/content";
-import { Reveal, SectionHeading, SpotlightCard, ease } from "./ui";
+import { Arrow, Reveal, SectionHeading, SpotlightCard, ease } from "./ui";
 
 /* ----------------------------- Visuals ----------------------------- */
 
 function AgentVisual() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { margin: "-80px" });
-  const prompt = "Cut the intro, add captions, export 9:16";
-  const tools = ["trim_clip(start=0, end=4.2)", "generate_captions(lang='en')", "set_aspect_ratio('9:16')", "export()"];
+  const prompt = "Cut the intro, add subtitles, make it vertical";
+  const tools = ["Cutting the intro", "Adding subtitles", "Making it vertical", "Saving your video"];
   const [typed, setTyped] = useState(0);
   const [step, setStep] = useState(-1);
 
@@ -55,7 +55,6 @@ function AgentVisual() {
             className="flex items-center justify-between gap-3 rounded-lg px-3 py-1.5"
           >
             <span className="truncate">
-              <span className="text-faint">mcp.</span>
               <span className="text-ink">{t}</span>
             </span>
             <span
@@ -95,7 +94,7 @@ function RagVisual() {
         </div>
       ))}
       <span className="absolute bottom-1 right-0 z-10 rounded-full bg-ink px-2.5 py-1 font-mono text-[10px] text-paper">
-        source [1] p.4
+        Source: page 4
       </span>
     </div>
   );
@@ -165,7 +164,7 @@ function PipelineVisual() {
         />
       ))}
       <div className="relative flex w-full justify-between">
-        {["raw", "embed", "serve"].map((s) => (
+        {["collect", "tidy", "use"].map((s) => (
           <span key={s} className="rounded-md border border-line bg-surface px-2 py-1 font-mono text-[10px] text-muted">
             {s}
           </span>
@@ -217,8 +216,116 @@ const icons: Record<Service["visual"], React.JSX.Element> = {
   ui: <path d="M4 5h16v14H4zM4 9h16M8 13h5M8 16h8" />,
 };
 
+/* ----------------------------- Details modal ----------------------------- */
+
+function ServiceDetails({ s, onClose }: { s: Service; onClose: () => void }) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.classList.add("lenis-stopped");
+    window.addEventListener("keydown", onKey);
+    closeRef.current?.focus();
+    return () => {
+      document.body.style.overflow = prev;
+      document.documentElement.classList.remove("lenis-stopped");
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[100] flex items-end justify-center bg-ink/40 p-0 backdrop-blur-sm sm:items-center sm:p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      onClick={onClose}
+    >
+      <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={`svc-${s.id}-title`}
+        data-lenis-prevent
+        onClick={(e) => e.stopPropagation()}
+        initial={{ y: 40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 40, opacity: 0 }}
+        transition={{ duration: 0.4, ease }}
+        className="relative max-h-[88vh] w-full max-w-2xl overflow-y-auto overscroll-contain rounded-t-3xl border border-line bg-paper p-6 shadow-card sm:rounded-3xl sm:p-9"
+      >
+        <button
+          ref={closeRef}
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full border border-line text-muted transition-colors hover:border-ink hover:text-ink sm:right-6 sm:top-6"
+        >
+          <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden>
+            <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
+
+        <div className="flex items-center gap-3 pr-12">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent-soft text-accent">
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              {icons[s.visual]}
+            </svg>
+          </span>
+          <span className="label">In plain English</span>
+        </div>
+        <h3 id={`svc-${s.id}-title`} className="mt-4 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+          {s.title}
+        </h3>
+        <p className="mt-4 text-[15.5px] leading-relaxed text-ink/85 sm:text-[16.5px]">{s.details.simple}</p>
+
+        <div className="mt-7">
+          <h4 className="font-display text-[15px] font-semibold">What it looks like in real life</h4>
+          <ul className="mt-3 space-y-2.5">
+            {s.details.examples.map((ex) => (
+              <li key={ex} className="flex gap-3 text-[14.5px] leading-relaxed text-muted">
+                <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                {ex}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-7 rounded-2xl border border-line bg-surface p-5">
+          <h4 className="font-display text-[15px] font-semibold">What you get</h4>
+          <ul className="mt-3 space-y-2">
+            {s.details.youGet.map((g) => (
+              <li key={g} className="flex gap-3 text-[14.5px] leading-relaxed text-muted">
+                <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-accent text-[10px] text-white">✓</span>
+                {g}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <p className="mt-6 text-[14.5px] leading-relaxed text-muted">
+          <span className="font-semibold text-ink">A good fit for: </span>
+          {s.details.goodFit}
+        </p>
+
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <a
+            href="#contact"
+            onClick={onClose}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-ink px-5 py-3 text-[14px] font-medium text-paper transition-opacity hover:opacity-90"
+          >
+            Talk to us about this <Arrow />
+          </a>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 /** Phone: one compact, expandable list instead of big cards. */
-function ServiceList() {
+function ServiceList({ onDetails }: { onDetails: (s: Service) => void }) {
   const [open, setOpen] = useState<string | null>(services[0].id);
   return (
     <div className="card mt-8 divide-y divide-line overflow-hidden p-0 md:hidden">
@@ -272,7 +379,7 @@ function ServiceList() {
                   className="overflow-hidden"
                 >
                   <div className="pb-4 pl-[4.25rem] pr-4">
-                    <p className="text-[13.5px] leading-relaxed text-muted">{s.body}</p>
+                    <p className="text-[13.5px] leading-relaxed text-muted">{s.details.simple}</p>
                     <ul className="mt-3 flex flex-wrap gap-1.5">
                       {s.points.map((pt) => (
                         <li key={pt} className="rounded-full border border-line bg-surface px-2.5 py-1 text-[11.5px] text-muted">
@@ -280,6 +387,13 @@ function ServiceList() {
                         </li>
                       ))}
                     </ul>
+                    <button
+                      type="button"
+                      onClick={() => onDetails(s)}
+                      className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-accent"
+                    >
+                      See examples &amp; what you get <Arrow className="h-3.5 w-3.5" />
+                    </button>
                   </div>
                 </motion.div>
               )}
@@ -293,10 +407,23 @@ function ServiceList() {
 
 /* ----------------------------- Section ----------------------------- */
 
-function ServiceCard({ s }: { s: Service; i?: number }) {
+function ServiceCard({ s, onDetails }: { s: Service; onDetails: (s: Service) => void }) {
   const V = visuals[s.visual];
   const lg = s.size === "lg";
   return (
+    <div
+      role="button"
+      tabIndex={0}
+      aria-label={`Learn more about ${s.title}`}
+      onClick={() => onDetails(s)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onDetails(s);
+        }
+      }}
+      className="group/card h-full cursor-pointer rounded-[inherit] outline-none transition-transform duration-300 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-accent"
+    >
     <SpotlightCard className="card flex h-full flex-col p-5 sm:p-7">
       <div className={lg ? "flex items-start justify-between" : "hidden"}>
         {lg && <span className="rounded-full bg-accent-soft px-3 py-1 text-[12px] font-medium text-accent">Our specialty</span>}
@@ -328,11 +455,17 @@ function ServiceCard({ s }: { s: Service; i?: number }) {
           <V />
         </div>
       )}
+      <span className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-accent">
+        Learn more <Arrow className="h-3.5 w-3.5 transition-transform duration-300 group-hover/card:translate-x-1" />
+      </span>
     </SpotlightCard>
+    </div>
   );
 }
 
 export default function Services() {
+  const [active, setActive] = useState<Service | null>(null);
+  const close = useCallback(() => setActive(null), []);
   const featured = services.filter((s) => s.size === "lg");
   const rest = services.filter((s) => s.size !== "lg");
   return (
@@ -341,32 +474,33 @@ export default function Services() {
         split
         index="01"
         label="Services"
-        title="AI that does real work,"
-        italic="and the software"
-        after="around it."
-        intro="We specialise in production AI, backed by the full-stack engineering it takes to ship it."
+        title="Smart software"
+        italic="that saves you"
+        after="time."
+        intro="From AI assistants to websites and apps, we build it all. Click any service to see what it means for your business."
       />
 
       <Reveal>
-        <ServiceList />
+        <ServiceList onDetails={setActive} />
       </Reveal>
 
       <div className="mt-14 hidden md:grid md:grid-cols-6 md:gap-4">
         {featured.map((s) => (
           <Reveal key={s.id} className={spans[s.size]}>
-            <ServiceCard s={s} i={services.indexOf(s)} />
+            <ServiceCard s={s} onDetails={setActive} />
           </Reveal>
         ))}
         {/* md+: these cards join the bento grid */}
         <div className="hidden md:contents">
           {rest.map((s, i) => (
             <Reveal key={s.id} delay={(i % 3) * 0.06} className={spans[s.size]}>
-              <ServiceCard s={s} i={services.indexOf(s)} />
+              <ServiceCard s={s} onDetails={setActive} />
             </Reveal>
           ))}
         </div>
       </div>
 
+      <AnimatePresence>{active && <ServiceDetails key={active.id} s={active} onClose={close} />}</AnimatePresence>
     </section>
   );
 }

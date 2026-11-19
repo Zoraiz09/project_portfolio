@@ -119,16 +119,23 @@ export function Arrow({ className = "" }: { className?: string }) {
   );
 }
 
-/** Placeholder brand mark until the studio has a logo. */
-export function Logo({ light }: { light?: boolean }) {
+/**
+ * Rays logo. `light` = always the white version (for dark backgrounds);
+ * otherwise it follows the site theme. `full` adds the "creative web development softwares" tagline.
+ */
+export function Logo({ light, full, className = "" }: { light?: boolean; full?: boolean; className?: string }) {
+  const kind = full ? "full" : "mark";
+  const size = full ? "h-28 sm:h-32" : "h-[50px] md:h-[58px]";
+  /* eslint-disable @next/next/no-img-element */
+  if (light)
+    return <img src={`/brand/rays-${kind}-light.png`} alt={`${site.name} logo`} className={`${size} w-auto ${className}`} />;
   return (
-    <span className={`flex items-center gap-2.5 ${light ? "text-snow" : "text-ink"}`}>
-      <span className={`grid h-7 w-7 place-items-center rounded-[8px] ${light ? "bg-snow" : "bg-ink"}`}>
-        <span className="h-2.5 w-2.5 rounded-[3px] bg-accent" />
-      </span>
-      <span className="font-display text-[17px] font-semibold tracking-tight">{site.name}</span>
+    <span className={`inline-flex ${className}`}>
+      <img src={`/brand/rays-${kind}-dark.png`} alt={`${site.name} logo`} className={`${size} w-auto dark:hidden`} />
+      <img src={`/brand/rays-${kind}-light.png`} alt="" aria-hidden className={`${size} hidden w-auto dark:block`} />
     </span>
   );
+  /* eslint-enable @next/next/no-img-element */
 }
 
 /** Read/subscribe to the current theme (the `dark` class on <html>). */

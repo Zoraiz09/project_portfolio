@@ -42,7 +42,7 @@ function MiniMcp() {
         {[0, 1, 2].map((i) => (
           <span key={i} className="h-1.5 w-1.5 rounded-full bg-white/20" />
         ))}
-        <span className="ml-2 font-mono text-[9px] text-white/40">editor — project.mp4</span>
+        <span className="ml-2 font-mono text-[9px] text-white/40">video editor</span>
       </div>
       <div className="grid flex-1 place-items-center rounded-lg bg-black/40">
         <div className="relative h-[78px] w-[46px] rounded-md" style={{ background: "linear-gradient(135deg,#2F4BFF,#7C8CF8 55%,#C7CEFF)" }}>
@@ -60,11 +60,11 @@ function MiniMcp() {
 function MiniRag() {
   return (
     <div className="flex h-full flex-col justify-end gap-2 bg-paper p-3 text-[10.5px]">
-      <div className="ml-auto max-w-[78%] rounded-xl rounded-br-sm bg-ink px-2.5 py-1.5 text-paper">Inspection interval for heat exchangers?</div>
+      <div className="ml-auto max-w-[78%] rounded-xl rounded-br-sm bg-ink px-2.5 py-1.5 text-paper">How often should equipment be inspected?</div>
       <div className="max-w-[86%] rounded-xl rounded-bl-sm border border-line bg-surface px-2.5 py-1.5 leading-snug text-ink/90 shadow-card">
         Every 12 months<sup className="ml-0.5 rounded bg-accent-soft px-0.5 font-mono text-[7px] text-accent">1</sup>, full bundle check every 3 years
         <sup className="ml-0.5 rounded bg-accent-soft px-0.5 font-mono text-[7px] text-accent">2</sup>.
-        <div className="mt-1 font-mono text-[8px] text-muted">[1] Maintenance-SOP.pdf · p.14</div>
+        <div className="mt-1 font-mono text-[8px] text-muted">Source: Maintenance Guide, page 14</div>
       </div>
     </div>
   );
@@ -152,7 +152,7 @@ function Card({
 
           <dl className="mt-5 hidden space-y-4 sm:block text-[14.5px] leading-relaxed sm:mt-6 sm:text-[15px]">
             <div className="hidden sm:block">
-              <dt className="label">Challenge</dt>
+              <dt className="label">The problem</dt>
               <dd className="mt-1.5 text-muted">{c.problem}</dd>
             </div>
             <div>
@@ -200,10 +200,10 @@ export default function Work() {
         <SectionHeading
           split
           index="02"
-          label="Selected work"
-          title="Built for production,"
-          italic="not for demos."
-          intro="A few systems we've designed and shipped, from agentic AI inside a live product to enterprise knowledge assistants."
+          label="Our work"
+          title="Real products,"
+          italic="real results."
+          intro="A few of the things we've built and launched, from AI assistants inside live products to complete business systems."
         />
 
         {/* Phone: swipeable compact cards */}

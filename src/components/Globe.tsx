@@ -3,12 +3,12 @@
 import { useEffect, useRef } from "react";
 
 type LatLon = [number, number];
-const HOME: LatLon = [31.5, 74.3]; // Pakistan
+const HOME: LatLon = [25.2, 55.3]; // Dubai, UAE
 const CLIENTS: { name: string; at: LatLon }[] = [
   { name: "New York", at: [40.7, -74] },
   { name: "London", at: [51.5, -0.1] },
   { name: "Berlin", at: [52.5, 13.4] },
-  { name: "Dubai", at: [25.2, 55.3] },
+  { name: "Singapore", at: [1.35, 103.8] },
   { name: "Riyadh", at: [24.7, 46.7] },
 ];
 
@@ -72,7 +72,7 @@ export default function Globe() {
       canvas.height = Math.round(h * dpr);
     };
 
-    // Sway between the US and Pakistan so every arc stays mostly in view.
+    // Sway between the US and the UAE so every arc stays mostly in view.
     let rotY = -35 * rad;
     let swayT = 0;
     const tilt = 24 * rad;
@@ -204,7 +204,7 @@ export default function Globe() {
       ref={ref}
       className="absolute inset-0 block h-full w-full"
       role="img"
-      aria-label="Globe showing connections from Pakistan to clients in the US, Europe and the Middle East"
+      aria-label="Globe showing connections from the UAE to clients in the US, Europe and the Middle East"
     />
   );
 }

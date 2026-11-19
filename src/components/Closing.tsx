@@ -50,7 +50,7 @@ function PlanCard({ e, phone }: { e: Plan; phone?: boolean }) {
   );
 }
 
-const planTabs = ["PoC", "Project", "Retainer"];
+const planTabs = ["Trial", "Project", "Monthly"];
 
 export function Engagement() {
   const listRef = useRef<HTMLDivElement>(null);
@@ -63,7 +63,7 @@ export function Engagement() {
         label="Ways to work together"
         title="Start small,"
         italic="or go all in."
-        intro="Every engagement starts with a free discovery call and a written proposal. No lock-in."
+        intro="Every project starts with a free call and a clear written plan. No long contracts, no lock-in."
       />
 
       {/* Phone: segmented control, one plan at a time */}
@@ -216,19 +216,17 @@ export function FAQ() {
 
 /* ------------------------------ Contact ----------------------------- */
 
-const projectTypes = ["AI agent / MCP integration", "RAG assistant", "AI feature in existing product", "SaaS / MVP", "Web app", "Other"];
-const budgets = ["< $5k", "$5k – $15k", "$15k – $50k", "$50k+", "Not sure yet"];
+const projectTypes = ["AI assistant", "Ask-your-documents assistant", "Add AI to my software", "New app or online product", "Website", "Not sure yet"];
 
 export function Contact() {
   const [type, setType] = useState(projectTypes[0]);
-  const [budget, setBudget] = useState(budgets[1]);
   const [sent, setSent] = useState(false);
 
   // TODO: connect to a form backend (e.g. Resend / Formspree). For now this opens the visitor's email client.
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
-    const body = `Name: ${f.get("name")}\nCompany: ${f.get("company") || "-"}\nProject: ${type}\nBudget: ${budget}\n\n${f.get("message")}`;
+    const body = `Name: ${f.get("name")}\nCompany: ${f.get("company") || "-"}\nProject: ${type}\n\n${f.get("message")}`;
     window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(`New project: ${type}`)}&body=${encodeURIComponent(body)}`;
     setSent(true);
   };
@@ -245,7 +243,7 @@ export function Contact() {
             label="Contact"
             title="Have an idea?"
             italic="Let's build it."
-            intro="Tell us what you're working on. You'll hear back within 24 hours from a senior engineer, not an account manager."
+            intro="Tell us what you have in mind. No technical knowledge needed. You'll hear back within 24 hours from someone who will actually build it."
             light
           />
           <Reveal delay={0.15}>
@@ -259,6 +257,23 @@ export function Contact() {
                 </span>
                 {site.email}
               </a>
+              <a href={`tel:${site.phone.replace(/\s/g, "")}`} className="group flex items-center gap-3 text-snow/80 transition-colors hover:text-snow">
+                <span className="grid h-10 w-10 place-items-center rounded-full border border-snow/15">
+                  <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden>
+                    <path d="M5.5 2.5h-2a1 1 0 0 0-1 1.1A11 11 0 0 0 12.4 13.5a1 1 0 0 0 1.1-1v-2l-2.6-1-1.3 1.3a7.5 7.5 0 0 1-3.4-3.4L7.5 6.1z" strokeLinejoin="round" />
+                  </svg>
+                </span>
+                {site.phone}
+              </a>
+              <p className="flex items-center gap-3 text-snow/60">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-snow/15">
+                  <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden>
+                    <path d="M8 14.5s4.5-4.2 4.5-8a4.5 4.5 0 0 0-9 0c0 3.8 4.5 8 4.5 8Z" strokeLinejoin="round" />
+                    <circle cx="8" cy="6.5" r="1.6" />
+                  </svg>
+                </span>
+                {site.address}
+              </p>
               <p className="flex items-center gap-3 text-snow/60">
                 <span className="grid h-10 w-10 place-items-center rounded-full border border-snow/15">
                   <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden>
@@ -266,7 +281,7 @@ export function Contact() {
                     <path d="M8 4.5V8l2.5 1.5" strokeLinecap="round" />
                   </svg>
                 </span>
-                {site.location} · {site.timezone}
+                Working worldwide · {site.timezone}
               </p>
             </div>
           </Reveal>
@@ -301,27 +316,9 @@ export function Contact() {
               <label className="sr-only" htmlFor="company">Company</label>
               <input id="company" name="company" placeholder="Company (optional)" className={`${field} sm:col-span-2`} autoComplete="organization" />
               <label className="sr-only" htmlFor="message">Project details</label>
-              <textarea id="message" name="message" required rows={4} placeholder="Tell us about the project, timeline and goals…" className={`${field} resize-none sm:col-span-2`} />
+              <textarea id="message" name="message" required rows={4} placeholder="Tell us your idea in your own words: what you want it to do, and when you need it…" className={`${field} resize-none sm:col-span-2`} />
             </div>
 
-            <fieldset className="mt-7">
-              <legend className="text-[14px] font-medium text-snow/60">Budget</legend>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {budgets.map((b) => (
-                  <button
-                    type="button"
-                    key={b}
-                    onClick={() => setBudget(b)}
-                    aria-pressed={budget === b}
-                    className={`rounded-full border px-3.5 py-2 text-[13px] transition-all duration-300 ${
-                      budget === b ? "border-snow bg-snow text-night" : "border-snow/15 text-snow/70 hover:border-snow/40"
-                    }`}
-                  >
-                    {b}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
 
             <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
               <Magnetic>
@@ -352,8 +349,17 @@ export function Footer() {
     <footer className="border-t border-snow/10 bg-night text-snow">
       <div className="container-site flex flex-col gap-10 py-14 md:flex-row md:items-start md:justify-between">
         <div className="max-w-xs">
-          <Logo light />
-          <p className="mt-4 text-[14px] leading-relaxed text-snow/50">{site.description}</p>
+          <Logo light full />
+          <p className="mt-6 text-[14px] leading-relaxed text-snow/50">{site.description}</p>
+          <address className="mt-5 space-y-1.5 text-[14px] not-italic leading-relaxed text-snow/60">
+            <span className="block">{site.address}</span>
+            <a href={`mailto:${site.email}`} className="block transition-colors hover:text-snow">
+              {site.email}
+            </a>
+            <a href={`tel:${site.phone.replace(/\s/g, "")}`} className="block transition-colors hover:text-snow">
+              {site.phone}
+            </a>
+          </address>
         </div>
         <div className="grid grid-cols-2 gap-10 text-[14px] sm:gap-16">
           <ul className="space-y-2.5">

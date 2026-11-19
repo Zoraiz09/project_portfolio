@@ -9,7 +9,7 @@ export function Studio() {
     <section id="studio" className="border-y border-line bg-surface py-14 sm:py-28">
       <div className="container-site">
         <Reveal>
-          <p className="label">The studio</p>
+          <p className="label">About us</p>
         </Reveal>
 
         <Reveal>
@@ -63,10 +63,10 @@ export function Stack() {
       <SectionHeading
         split
         index="06"
-        label="Stack"
-        title="Modern tools,"
-        italic="chosen deliberately."
-        intro="We pick technology for your constraints, not for our CV."
+        label="What we can do"
+        title="Everything your product needs,"
+        italic="in one place."
+        intro="No need to hire separate teams. We handle the AI, the design, the behind-the-scenes systems and the hosting."
       />
       <div className="mt-10 grid grid-cols-2 gap-3 sm:mt-14 sm:gap-4 lg:grid-cols-4">
         {stack.map((g, gi) => (
@@ -95,7 +95,8 @@ export function Global() {
   const zones = [
     { city: "New York", tz: "GMT−5", overlap: "Mornings" },
     { city: "London", tz: "GMT+0", overlap: "Full afternoon" },
-    { city: "Dubai", tz: "GMT+4", overlap: "Full day" },
+    { city: "Riyadh", tz: "GMT+3", overlap: "Full day" },
+    { city: "Singapore", tz: "GMT+8", overlap: "Mornings" },
   ];
   return (
     <section className="relative overflow-hidden border-y border-line bg-surface py-14 sm:py-28">
@@ -104,9 +105,9 @@ export function Global() {
           <SectionHeading
             index="07"
             label="Global"
-            title="Remote by design,"
-            italic="close by habit."
-            intro={`Based in ${site.location.split(" ·")[0]} (${site.timezone}), working with teams across the US, Europe and the Middle East, with real overlap hours and async updates every day.`}
+            title="Based in Dubai,"
+            italic="working worldwide."
+            intro={`Based in ${site.location.split(" ·")[0]} (${site.timezone}), working with businesses across the Middle East, Europe, Asia and the US, with shared working hours and written updates every day.`}
           />
           <ul className="mt-8 divide-y divide-line border-y border-line sm:mt-10">
             {zones.map((z, i) => (

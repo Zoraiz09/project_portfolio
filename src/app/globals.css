@@ -92,6 +92,15 @@
   }
 }
 
+/* Custom cursor (desktop mouse only): hide the native pointer, keep the text caret in fields */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+html.has-custom-cursor :is(input, textarea, select, [contenteditable="true"]) {
+  cursor: text !important;
+}
+
 /* Faint dot grid used behind the hero and CTA */
 .dot-grid {
   background-image: radial-gradient(rgb(var(--ink) / 0.13) 1px, transparent 1px);

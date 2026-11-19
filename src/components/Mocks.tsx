@@ -22,7 +22,7 @@ const mcpDurations = [900, 1700, 900, 900, 900, 2600];
 export function McpEditorMock() {
   const ref = useRef<HTMLDivElement>(null);
   const step = useLoop(mcpDurations, ref);
-  const prompt = "Cut the intro, add captions, make it vertical";
+  const prompt = "Cut the intro, add subtitles, make it vertical";
   const typed = step >= 1;
   const cut = step >= 2;
   const captions = step >= 3;
@@ -36,7 +36,7 @@ export function McpEditorMock() {
         <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
         <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
         <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-        <span className="ml-3 font-mono text-[10px] text-white/40">editor — project.mp4</span>
+        <span className="ml-3 font-mono text-[10px] text-white/40">video editor</span>
       </div>
 
       {/* preview */}
@@ -162,8 +162,8 @@ export function RagChatMock() {
                 <sup className="ml-0.5 rounded bg-accent-soft px-1 font-mono text-[9px] text-accent">2</sup>.
               </p>
               <div className="mt-3 flex flex-wrap gap-1.5 font-mono text-[10px] text-muted">
-                <span className="rounded-md border border-line px-2 py-0.5">[1] Maintenance-SOP.pdf · p.14</span>
-                <span className="rounded-md border border-line px-2 py-0.5">[2] Asset-Integrity.docx · §3.2</span>
+                <span className="rounded-md border border-line px-2 py-0.5">Maintenance Guide · page 14</span>
+                <span className="rounded-md border border-line px-2 py-0.5">Safety Manual · section 3</span>
               </div>
             </motion.div>
           )}

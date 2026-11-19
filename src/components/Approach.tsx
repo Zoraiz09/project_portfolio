@@ -24,10 +24,10 @@ export function AIPipeline() {
           split
           index="03"
           label="How we build AI"
-          title="Reliable AI is an"
-          italic="engineering"
-          after="problem."
-          intro="Models are the easy part. We engineer everything around them (data, retrieval, tools and guardrails) so the result is something your users can depend on."
+          title="AI you can"
+          italic="actually"
+          after="trust."
+          intro="The AI itself is the easy part. What matters is feeding it the right information, connecting it to your tools and adding safety checks, so it gives answers your customers can rely on."
         />
 
         {/* Pipeline */}
@@ -100,9 +100,9 @@ export function Process() {
           <SectionHeading
             index="04"
             label="Process"
-            title="A process built on"
+            title="Simple steps,"
             italic="no surprises."
-            intro="Clear milestones, weekly demos and one point of contact who actually writes the code. You always know where your project stands."
+            intro="A clear plan, progress you can see every week, and one person to talk to who is actually building your product. You always know where things stand."
           />
         </div>
 

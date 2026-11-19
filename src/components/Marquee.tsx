@@ -14,7 +14,7 @@ export default function Marquee() {
         className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-paper to-transparent"
         aria-hidden
       />
-      <ul className="flex w-max animate-marquee items-center gap-10 group-hover:[animation-play-state:paused]" aria-label="Technologies we use">
+      <ul className="flex w-max animate-marquee items-center gap-10 group-hover:[animation-play-state:paused]" aria-label="What we can do">
         {row.map((t, i) => (
           <li
             key={i}

@@ -204,6 +204,9 @@ export default function Nav() {
                 <a href={`mailto:${site.email}`} className="mt-3 block text-center text-[13px] text-muted">
                   {site.email}
                 </a>
+                <a href={`tel:${site.phone.replace(/\s/g, "")}`} className="mt-1 block text-center text-[13px] text-muted">
+                  {site.phone}
+                </a>
               </motion.div>
             </motion.div>
           </>
