@@ -62,8 +62,22 @@ export default function Nav() {
           }`}
         >
           <nav className="container-site flex h-[60px] items-center justify-between md:h-[68px]" aria-label="Main">
-            <a href="#top" aria-label="Home">
-              <Logo />
+            {/* Like raysglobals.com: the full logo (with tagline) hangs large below the bar at the top of
+                the page; once scrolled it swaps to the compact mark so it fits inside the bar. */}
+            <a href="#top" aria-label="Rays, home" className="relative block h-[50px] w-[46px] self-start md:h-[58px] md:w-[74px]">
+              <Logo
+                full
+                size="h-[104px] md:h-[170px]"
+                className={`absolute left-0 top-3 transition-all duration-500 ease-out md:top-4 ${
+                  scrolled ? "pointer-events-none -translate-y-2 opacity-0" : "opacity-100"
+                }`}
+              />
+              <Logo
+                size="h-[44px] md:h-[52px]"
+                className={`absolute left-0 top-2 transition-all duration-500 ease-out ${
+                  scrolled ? "opacity-100" : "pointer-events-none translate-y-2 opacity-0"
+                }`}
+              />
             </a>
 
             <ul

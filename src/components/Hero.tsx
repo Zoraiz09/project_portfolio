@@ -90,7 +90,7 @@ export default function Hero() {
 
   return (
     <section id="top" className="relative overflow-hidden pt-[60px] md:pt-[68px]">
-      <div className="container-site relative grid items-center pb-10 pt-6 sm:py-12 lg:min-h-[calc(100svh-68px)] lg:grid-cols-[1.2fr_1fr] lg:content-center lg:gap-x-4 lg:py-0">
+      <div className="container-site relative grid items-center pb-10 pt-16 sm:pb-12 md:pt-32 lg:min-h-[calc(100svh-68px)] lg:grid-cols-[1.2fr_1fr] lg:content-center lg:gap-x-4 lg:pb-0 lg:pt-28">
         <div className="relative z-10 order-1 lg:col-start-1 lg:row-start-1">
           {/* Phone: small robot peeking in at the top-right, beside the first lines of the headline */}
           {phone && (
