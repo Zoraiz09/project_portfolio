@@ -123,16 +123,27 @@ export function Arrow({ className = "" }: { className?: string }) {
  * Rays logo. `light` = always the white version (for dark backgrounds);
  * otherwise it follows the site theme. `full` adds the "creative web development softwares" tagline.
  */
-export function Logo({ light, full, className = "" }: { light?: boolean; full?: boolean; className?: string }) {
+export function Logo({
+  light,
+  full,
+  size: sizeOverride,
+  className = "",
+}: {
+  light?: boolean;
+  full?: boolean;
+  /** Tailwind height classes, to override the default size */
+  size?: string;
+  className?: string;
+}) {
   const kind = full ? "full" : "mark";
-  const size = full ? "h-28 sm:h-32" : "h-[50px] md:h-[58px]";
+  const size = sizeOverride ?? (full ? "h-28 sm:h-32" : "h-[50px] md:h-[58px]");
   /* eslint-disable @next/next/no-img-element */
   if (light)
-    return <img src={`/brand/rays-${kind}-light.png`} alt={`${site.name} logo`} className={`${size} w-auto ${className}`} />;
+    return <img src={`/brand/rays-${kind}-light.png`} alt={`${site.name} logo`} className={`${size} w-auto max-w-none shrink-0 ${className}`} />;
   return (
     <span className={`inline-flex ${className}`}>
-      <img src={`/brand/rays-${kind}-dark.png`} alt={`${site.name} logo`} className={`${size} w-auto dark:hidden`} />
-      <img src={`/brand/rays-${kind}-light.png`} alt="" aria-hidden className={`${size} hidden w-auto dark:block`} />
+      <img src={`/brand/rays-${kind}-dark.png`} alt={`${site.name} logo`} className={`${size} w-auto max-w-none shrink-0 dark:hidden`} />
+      <img src={`/brand/rays-${kind}-light.png`} alt="" aria-hidden className={`${size} hidden w-auto max-w-none shrink-0 dark:block`} />
     </span>
   );
   /* eslint-enable @next/next/no-img-element */
